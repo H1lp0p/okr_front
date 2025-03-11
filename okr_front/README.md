@@ -3,6 +3,7 @@
 node_modules/                 //well, modules. Just don't touch it
 src/                          //components + resources + styles
 |   ├── api/                  //all about requests and preparations for hooks (url generations) [.ts]
+|   ├── models/               //data models (4 example userModel, requestModel and ect)
 |   ├── components/           //all components with it's styles [.tsx .css]
 |       ├── header/           
 |       ├── body/             //example of component 
