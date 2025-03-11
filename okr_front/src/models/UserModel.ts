@@ -1,4 +1,4 @@
-import UserInfo from "../types/user"
+import UserInfo, { Roles } from "../types/user"
 
 import endpoint from "../api/endpoints"
 
@@ -17,7 +17,7 @@ class UserModel implements UserInfo{
     Surname?: string | null | undefined
     Patronymic?: string | null | undefined
     Email?: string | null | undefined
-    Roles : string[] = []
+    Roles : Roles[] = []
 
     private separator: string = "; "
 
@@ -79,13 +79,12 @@ class UserModel implements UserInfo{
     private getInst() : void{
         let token = localStorage.getItem(UserStorageItems.token)
         if (token != null){
-            console.log(token)
             this.Jwt = token
             this.Email = localStorage.getItem(UserStorageItems.email)
             this.Name =  localStorage.getItem(UserStorageItems.name)
             this.Surname =  localStorage.getItem(UserStorageItems.surname)
             this.Patronymic =  localStorage.getItem(UserStorageItems.patronymic)
-            this.Roles =  localStorage.getItem(UserStorageItems.roles)!.split(this.separator)
+            this.Roles =  localStorage.getItem(UserStorageItems.roles)!.split(this.separator).map((val: String) => {return Roles[val as keyof typeof Roles]})
         }
         else{
             this.clear()

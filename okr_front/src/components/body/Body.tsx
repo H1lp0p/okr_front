@@ -12,6 +12,10 @@ function Body() {
   const [counter, setCounter] = useState(0)
   const [user, setUser] = useState(new UserModel())
 
+  user.login("a", "b")
+
+  //user.logout()
+
   return (
     <>
       <Header

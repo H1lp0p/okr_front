@@ -1,6 +1,11 @@
-header{
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    align-items: center;
+.exit{
+    height: 38px;
+}
+
+.exit:hover{
+    background-color: var(--color-on-primary);
+}
+
+.btn-custom{
+    background-color: var(--color-on-primary);
 }

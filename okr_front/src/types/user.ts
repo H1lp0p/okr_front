@@ -4,9 +4,17 @@ interface UserInfo {
     Surname?: string | null
     Patronymic?: string | null
     Email?: string | null
-    Roles: string[]
+    Roles: Roles[]
     login(email: string, password: string): void
     logout() : void
 }
 
+enum Roles{
+    student = "student",
+    teacher = "teacher",
+    worker = "worker",
+    admin = "admin"
+}
+
 export default UserInfo
+export {Roles}
