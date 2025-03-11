@@ -1,20 +1,23 @@
 import React, {useState} from "react"
-import UserInfo from "../../types/user"
 import { Roles } from "../../types/user"
 
 import './header.css'
+import UserModel from "../../models/UserModel"
 
 
 interface HeaderProps {
-    user: UserInfo
+    user: UserModel,
+    logout? : () => void | null 
 }
 
 function Header(props: HeaderProps) {
-    const [userState, setuserState] = useState(props.user) 
 
-    console.log(userState)
+    const userState = props.user
 
-    const navTabs = (userState: UserInfo) => {
+    console.log(userState);
+    
+
+    const navTabs = (userState: UserModel) => {
         return (
         <ul className="navbar-nav">
             {userState.Roles.findIndex((val: Roles) => val == Roles.teacher) != -1 &&
@@ -32,14 +35,23 @@ function Header(props: HeaderProps) {
         return str.length > maxLen ? str.slice(0, maxLen) + "..." : str
     }
 
-    const userProfile = (userState: UserInfo) => {
+    const logoutFunc = () => {
+        if (props.logout != null){
+            props.logout()
+        }
+    }
+
+    const userProfile = (userState: UserModel) => {
         return (
             <div className="d-flex">
                 <div className="mx-2 d-flex flex-column justify-content-center text-light text-center">
                     <span>{adjust(`${userState.Name} ${userState.Surname} ${userState.Patronymic}`)}</span>
                     <span>{adjust(`${userState.Email}`)}</span>
                 </div>
-                <img className="btn p-2 rounded align-self-center" src="./src/resources/exit.svg"></img>
+                <button className="btn p-2 rounded align-self-center"
+                onClick={() => {logoutFunc()}}>
+                    <img className="exit" src="./src/resources/exit.svg"/>
+                </button>
             </div>
         )
     }
@@ -47,7 +59,7 @@ function Header(props: HeaderProps) {
     const loginRegisterbtns = () => {
         return (
             <div>
-                <button className="btn btn-custom text-light">Вход</button>
+                <button className="btn text-light">Вход</button>
                 <button className="btn text-light">регистрация</button>
             </div>
         )
@@ -55,18 +67,26 @@ function Header(props: HeaderProps) {
 
     return (
         <nav className="navbar navbar-expand-md bg-primary">
-            <div className="container-fluid d-flex justify-content-start">
+            <div className="container-fluid d-flex justify-content-between">
                 <a className="navbar-brand" href="/">
                     <img src="./src/resources/house.svg"/>
                 </a>
-                <div className="flex-grow-1">
-                {userState.Jwt != null && 
-                 navTabs(userState)   
-                }
-                </div>
+                <button className="navbar-toggler text-light justify-self-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
+                    <span className="navbar-toggler-icon"></span>
+                </button>
                 
-                {userState.Jwt != null && userProfile(userState)}
-                {userState.Jwt == null && loginRegisterbtns()}
+                <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+                    <div className="container-fluid d-flex flex-row">
+                        <div className="flex-grow-1">
+                        {userState.Jwt != null && 
+                        navTabs(userState)   
+                        }
+                        </div>
+                        
+                        {userState.Jwt != null && userProfile(userState)}
+                        {userState.Jwt == null && loginRegisterbtns()}
+                    </div>
+                </div>
             </div>
         </nav>
     )

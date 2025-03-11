@@ -2,10 +2,6 @@
     height: 38px;
 }
 
-.exit:hover{
-    background-color: var(--color-on-primary);
-}
-
 .btn-custom{
     background-color: var(--color-on-primary);
 }
