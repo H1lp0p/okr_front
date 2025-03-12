@@ -1,4 +1,4 @@
-import UserInfo, { Roles } from "../types/user"
+import { Roles } from "../types/user"
 
 import endpoint from "../api/endpoints"
 
@@ -11,7 +11,7 @@ enum UserStorageItems{
     roles = "roles"
 }
 
-class UserModel implements UserInfo{
+class UserModel{
     Jwt?: string | null | undefined
     Name?: string | null | undefined
     Surname?: string | null | undefined
@@ -25,25 +25,29 @@ class UserModel implements UserInfo{
         this.getInst()
     }
 
-    login(email: string, password: string): void {
-        endpoint.user.login({email: email, password: password}).then(res => {
+    login(email: string, password: string): Promise<UserModel> {
+        return endpoint.user.login({email: email, password: password}).then(res => {
             this.Jwt = res.token
-            this.getInfo()
+        }).then(res => this.getInfo()).then(res => new UserModel())
+    }
+    logout(): Promise<UserModel> {
+        this.clear()
+        return new Promise((resolver) => {
+            setTimeout(resolver, 1000)
+        }).then((res) => {
+            return new UserModel()
         })
     }
-    logout(): void {
-        this.clear()
-    }
 
-    private getInfo(): void {
-        endpoint.user.info(this.Jwt!).then(res => {
+    private getInfo(): Promise<boolean> {
+        return endpoint.user.info(this.Jwt!).then(res => {
             this.Email = res.email
             this.Name = res.name
             this.Surname = res.surname
             this.Patronymic = res.patronymic
             this.Roles = res.role
             this.saveInst()
-        })
+        }).then(res => true)
     }
 
     private saveInst(): void {

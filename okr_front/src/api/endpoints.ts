@@ -12,7 +12,7 @@ const endpoint = {
             })
         },
         info: (jwt: string) => {
-            return new Promise(resolver => setTimeout(resolver, 1000)).then(res => {
+            return new Promise(resolver => setTimeout(resolver, 100)).then(res => {
                 return {
                     name: "Василий",
                     surname: "Полушкин",

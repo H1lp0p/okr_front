@@ -9,20 +9,32 @@ interface BodyProps{
 
 function Body() {
 
-  const [counter, setCounter] = useState(0)
   const [user, setUser] = useState(new UserModel())
 
-  user.login("a", "b")
+  const logout = () => {
+    user.logout().then(res => {
+      setUser(prewUser => res)
+    })
+  }
 
-  //user.logout()
+  const login = (email: string, password: string) => {
+    user.login(email, password).then(res => {
+      console.log("SET", res);
+      
+        setUser(prewUser => res)
+    })
+  }
 
   return (
     <>
       <Header
-        user={user}/>
+        user={user}
+        logout={logout}/>
 
       <span>Мы делаем фронт, честно</span><br/>
-      <button onClick={(event) => {setCounter(counter + 1)}}>Count = {counter}</button>
+      <button
+      className='btn btn-primary' 
+      onClick={(event) => {login("a", "b")}}>Тестовый login</button>
     </>
   )
 }
