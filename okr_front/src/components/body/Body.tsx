@@ -5,6 +5,10 @@ import Login from '../login-form/loginFrom';
 import Registration from '../register-form/register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
+import RequestInfo from '../requestInfo/RequestInfo'
+import RequestInfoModel from '../../models/RequstModel'
+import Attachment from '../../models/Attachmet'
+import { RequestStatuses, RequestTypes } from '../../types/request'
 
 interface BodyProps{
 
@@ -27,6 +31,17 @@ function Body() {
         setUser(prewUser => res)
     })
   }
+
+  let testRequest = new RequestInfoModel(
+    "id",
+    new Date(),
+    new Date(),
+    [new Attachment()],
+    "Вася Полушкин",
+    ["972303"],
+    RequestStatuses.inQueue,
+    RequestTypes.sick
+  )
 
   return (
     <>
