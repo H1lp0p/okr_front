@@ -21,8 +21,20 @@ const requestTypeText = (type: RequestTypes) => {
     }
 }
 
+const requestStatusText = (status: RequestStatuses) => {
+    switch (status){
+        case RequestStatuses.approved:
+            return "подтверждено"
+        case RequestStatuses.denied:
+            return "отклонено"
+        case RequestStatuses.inQueue:
+            return "в очереди"
+    }
+}
+
 export {
     RequestTypes,
     RequestStatuses,
     requestTypeText,
+    requestStatusText
 }

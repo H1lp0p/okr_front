@@ -1,0 +1,56 @@
+
+.chip{
+    display: flex;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 125px;
+    min-height: 3em;
+    border-radius: var(--chip-radius);
+    border: var(--base-border-width) solid var(--color-secondary);
+    background-color: white;
+    color: black;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    font-size: 1em;
+}
+
+.chip-type-sick{
+    border: var(--base-border-width) solid var(--color-sick);
+}
+
+
+.chip-type-family{
+    border: var(--base-border-width) solid var(--color-family);
+}
+
+.chip-type-trip{
+    border: var(--base-border-width) solid var(--color-trip);
+}
+
+.chip-status{
+    border: var(--base-border-width) solid var(--color-primary);
+}
+
+.date-chip{
+    min-height: 40px;
+    background-color: var(--color-on-primary);
+    color: white;
+    text-align: center;
+    justify-content: center;
+    align-content: center;
+    font-size: 1em;
+    padding-left: 1em;
+    padding-right: 1em;    
+}
+
+.date-chip:first-child{
+    border-right: 1px solid white;
+    border-top-left-radius: var(--chip-radius);
+    border-bottom-left-radius: var(--chip-radius);
+}
+
+.date-chip:last-child{
+    border-top-right-radius: var(--chip-radius);
+    border-bottom-right-radius: var(--chip-radius);
+}

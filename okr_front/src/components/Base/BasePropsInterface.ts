@@ -4,7 +4,7 @@ interface BaseProps{
     className?: string,
     children?: ReactElement[],
     style?: string,
-    key?: string
+    id?: string
 }
 
 export default BaseProps
