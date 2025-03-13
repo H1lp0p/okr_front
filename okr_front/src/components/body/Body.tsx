@@ -5,12 +5,13 @@ import Login from '../login-form/loginFrom';
 import Registration from '../register-form/register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
+import BaseProps from '../Base/BasePropsInterface'
 import RequestInfo from '../requestInfo/RequestInfo'
 import RequestInfoModel from '../../models/RequstModel'
 import Attachment from '../../models/Attachmet'
 import { RequestStatuses, RequestTypes } from '../../types/request'
 
-interface BodyProps{
+interface BodyProps extends BaseProps{
 
 }
 
