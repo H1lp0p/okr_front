@@ -2,6 +2,10 @@ import React, { useState } from 'react'
 import './Body.css'
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
+import RequestInfo from '../requestInfo/RequestInfo'
+import RequestInfoModel from '../../models/RequstModel'
+import Attachment from '../../models/Attachmet'
+import { RequestStatuses, RequestTypes } from '../../types/request'
 
 interface BodyProps{
 
@@ -25,6 +29,17 @@ function Body() {
     })
   }
 
+  let testRequest = new RequestInfoModel(
+    "id",
+    new Date(),
+    new Date(),
+    [new Attachment()],
+    "Вася Полушкин",
+    ["972303"],
+    RequestStatuses.inQueue,
+    RequestTypes.sick
+  )
+
   return (
     <>
       <Header
@@ -35,6 +50,12 @@ function Body() {
       <button
       className='btn btn-primary' 
       onClick={(event) => {login("a", "b")}}>Тестовый login</button>
+
+      <div className='w-50 p-2'>
+        <RequestInfo
+          request={testRequest}
+        />
+      </div>
     </>
   )
 }

@@ -1,0 +1,32 @@
+:root{
+    --date-badge-radius: 16px;
+    --base-border-radius: 2px;
+}
+
+.type-sick{
+    border: var(--base-border-radius    ) solid var(--color-sick);
+}
+
+.type-family{
+    border-color: var(--color-family);
+}
+
+.type-trip{
+    border-color: var(--color-trip);
+}
+
+.date-badge{
+    background-color: var(--color-primary);
+    color: white;
+}
+
+.date-badge:first-child{
+    border-right: 2px solid white;
+    border-top-left-radius: var(--date-badge-radius);
+    border-bottom-left-radius: var(--date-badge-radius);
+}
+
+.date-badge:last-child{
+    border-top-right-radius: var(--date-badge-radius);
+    border-bottom-right-radius: var(--date-badge-radius);
+}
