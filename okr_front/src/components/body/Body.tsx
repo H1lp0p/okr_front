@@ -2,8 +2,9 @@ import React, { useState } from 'react'
 import './Body.css'
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
+import BaseProps from '../Base/BasePropsInterface'
 
-interface BodyProps{
+interface BodyProps extends BaseProps{
 
 }
 

@@ -3,9 +3,10 @@ import { Roles } from "../../types/user"
 
 import './header.css'
 import UserModel from "../../models/UserModel"
+import BaseProps from "../Base/BasePropsInterface"
 
 
-interface HeaderProps {
+interface HeaderProps extends BaseProps {
     user: UserModel,
     logout? : () => void | null 
 }
