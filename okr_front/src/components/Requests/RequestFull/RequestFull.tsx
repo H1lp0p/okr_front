@@ -1,11 +1,15 @@
 import RequestInfoModel from "../../../models/RequstModel";
 import { RequestTypes } from "../../../types/request";
+import { Roles } from "../../../types/user";
 import BaseProps from "../../Base/BasePropsInterface";
+import Input from "../../inputs/input";
 import { StatusChip, TypeChip } from "../chips/Chips";
 
 interface RequestFullProps extends BaseProps{
-    isEditable?: boolean
-    request?: RequestInfoModel
+    isEditable?: boolean,
+    isNew?: boolean,
+    request?: RequestInfoModel,
+    roles?: Roles[]
 }
 
 function RequestFull(props: RequestFullProps){
@@ -30,12 +34,27 @@ function RequestFull(props: RequestFullProps){
                 {request && 
                     <div className={`rounded h-100 w-100 ${requestStyle(request.requestType)}`}>
                         <form>
-                            <StatusChip
-                                status={request.requestStatus}
-                            />
-                            <TypeChip
-                                type={request.requestType}
-                            />
+                            <div className="w-100 p-5 d-flex flex-row justify-content-between">
+                                <div>
+                                    <div className="h2">
+                                        {request.studentName}
+                                    </div>
+                                    <div className="h3 text-secondary">
+                                        {request.groupList.join("; ")}
+                                    </div>
+                                </div>
+                                <TypeChip
+                                    className="align-items-center align-self-center"
+                                    type={request.requestType}
+                                />
+                            </div>
+                            <div className="input-group p-4">
+                                <Input
+                                    inputType="date"
+                                    placehodler="Начальная дата"
+                                    classAttr=""
+                                />
+                            </div>
                         </form>
                     </div>
                 }
