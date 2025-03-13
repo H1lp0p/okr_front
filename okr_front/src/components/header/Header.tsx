@@ -1,6 +1,6 @@
 import React, {useState} from "react"
 import { Roles } from "../../types/user"
-
+import { Link } from 'react-router-dom';
 import './header.css'
 import UserModel from "../../models/UserModel"
 
@@ -59,8 +59,8 @@ function Header(props: HeaderProps) {
     const loginRegisterbtns = () => {
         return (
             <div>
-                <button className="btn text-light">Вход</button>
-                <button className="btn text-light">регистрация</button>
+                <Link className="btn text-light" to="/login">Вход</Link>
+                <Link className="btn text-light" to="/registration">Регистрация</Link>
             </div>
         )
     }
@@ -68,9 +68,9 @@ function Header(props: HeaderProps) {
     return (
         <nav className="navbar navbar-expand-md bg-primary">
             <div className="container-fluid d-flex justify-content-between">
-                <a className="navbar-brand" href="/">
+                <Link className="navbar-brand" to="/">
                     <img src="./src/resources/house.svg"/>
-                </a>
+                </Link>
                 <button className="navbar-toggler text-light justify-self-end" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
