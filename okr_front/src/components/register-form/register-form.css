@@ -1,0 +1,36 @@
+.register-cont{
+    max-width: 615px !important;
+    min-width: 400px !important;
+    max-height: 600px !important;
+    min-height: 600px !important;
+}
+
+.register-cont .input-group:first-child{
+    margin-bottom: 30px !important;
+}
+.register-cont .input-group:nth-of-type(2){
+    margin-bottom: 30px !important;
+}
+.register-cont .input-group:nth-of-type(3){
+    margin-bottom: 30px !important;
+}
+.register-cont .input-group:nth-of-type(4){
+    margin-bottom: 59px !important;
+}
+
+.registr-btn{
+    min-width: 304px !important;
+    min-height: 61px !important;
+    text-align: center !important;
+    font-size: 20px !important;
+    background-color: rgb(106,106,106) !important;
+    border-radius: 16px !important;
+}
+.registr-btn-cont{
+    text-align: center !important;
+}
+input[type="date"]::-webkit-calendar-picker-indicator{
+    background-image: url('../../resources/calendar.svg') !important;
+    background-size: contain !important;
+    color: transparent !important;
+} 
