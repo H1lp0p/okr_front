@@ -90,20 +90,14 @@ function RequestFull(props: RequestFullProps){
                             </div>
 
                             <div 
-                                style={
-                                    {
-                                        border: "2px dashed gray"
-                                    }
-                                }
-
-                                className="h-25 d-flex rounded justify-content-center align-items-center m-2 p-4"
+                                className={`${requestStyle(request.requestType)}-dashed h-25 d-flex rounded justify-content-center align-items-center m-2 p-4`}
                             >
 
                                 Добавить файл
                             </div>
                             <div style={{overflowY: 'scroll'}}>
                                 {request.attachments.map((el, it) => {
-                                    return <AttachmentInfo attachment={el} key={`${request.id}_attachment_${it}`}/>
+                                    return <AttachmentInfo className={requestStyle(request.requestType)} attachment={el} key={`${request.id}_attachment_${it}`}/>
                                 })}
                             </div>
                         </form>
@@ -113,8 +107,8 @@ function RequestFull(props: RequestFullProps){
     )
 }
 
-interface AttachmentProps{
-    attachment: Attachment
+interface AttachmentProps extends BaseProps{
+    attachment: Attachment,
 }
 
 function AttachmentInfo (props: AttachmentProps){
@@ -122,7 +116,7 @@ function AttachmentInfo (props: AttachmentProps){
 
     return (
         <div 
-        className="rounded d-flex justify-content-between align-items-center p-3 m-2"
+        className={`rounded d-flex justify-content-between align-items-center p-3 m-2 ${props.className}`}
          style={{
             border: '2px solid gray'
          }}>
@@ -130,7 +124,7 @@ function AttachmentInfo (props: AttachmentProps){
         <span>{props.attachment.fileName}</span>
         <div className="d-flex flex-column justify-content-center align-items-center">
             <span>добавлен</span>
-            <div className="chip-type-sick rounded">{props.attachment.date?.toDateString()}</div>
+            <div className={`chip-${props.className} rounded`}>{props.attachment.date?.toDateString()}</div>
         </div>
         </div>
     )

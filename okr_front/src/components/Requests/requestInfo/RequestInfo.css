@@ -19,6 +19,18 @@
     border: var(--base-border-width) solid var(--color-trip) !important;
 }
 
+.type-sick-dashed{
+    border: var(--base-border-width) dashed var(--color-sick) !important;
+}
+
+.type-family-dashed{
+    border: var(--base-border-width) dashed var(--color-family) !important;
+}
+
+.type-trip-dashed{
+    border: var(--base-border-width) dashed var(--color-trip) !important;
+}
+
 .type-sick-filled{
     border: var(--base-border-width) solid var(--color-sick);
     background-color: var(--color-sick);

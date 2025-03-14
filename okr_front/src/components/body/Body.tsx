@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './Body.css'
 import { Routes, Route, Link } from 'react-router-dom';
 import Login from '../login-form/LoginForm';
-import Registration from '../register-form/Register-form';
+import Registration from '../register-form/register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
 import BaseProps from '../Base/BasePropsInterface'
@@ -34,7 +34,9 @@ function Body() {
     })
   }
   const register = (email: string, name:string, bithdate: string,  password: string) => {
-    UserModel
+    user.register(email, name, bithdate, password).then(res => {
+      setUser(res)
+    })
   }
 
   return (
