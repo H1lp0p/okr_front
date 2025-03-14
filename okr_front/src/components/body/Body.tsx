@@ -1,8 +1,8 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import './Body.css'
 import { Routes, Route, Link } from 'react-router-dom';
-import Login from '../login-form/loginFrom';
-import Registration from '../register-form/register-form';
+import Login from '../login-form/LoginForm';
+import Registration from '../register-form/Register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
 import BaseProps from '../Base/BasePropsInterface'
@@ -32,6 +32,9 @@ function Body() {
         setUser(prewUser => res)
     })
   }
+  const register = (email: string, name:string, bithdate: string,  password: string) => {
+    UserModel
+  }
 
   let testRequest = new RequestInfoModel(
     "id",
@@ -56,8 +59,8 @@ function Body() {
           className='btn btn-primary' 
           onClick={(event) => {login("a", "b")}}>Тестовый login</button>
         </>}/>
-        <Route path="/login" element={<Login/>}/>
-        <Route path="/registration" element={<Registration/>}/>
+        <Route path="/login" element={<Login login={login}/>}/>
+        <Route path="/registration" element={<Registration registration={register}/>}/>
       </Routes>
     </>
   )

@@ -30,6 +30,11 @@ class UserModel{
             this.Jwt = res.token
         }).then(res => this.getInfo()).then(res => new UserModel())
     }
+    register(email: string, name:string, bithdate: string,  password: string): Promise<UserModel>{
+        return endpoint.user.registration({email: email, name:name, bithdate: bithdate,  password: password}).then(res => {
+            this.Jwt = res.token
+        }).then(res => this.getInfo()).then(res => new UserModel())
+    }
     logout(): Promise<UserModel> {
         this.clear()
         return new Promise((resolver) => {
