@@ -8,15 +8,15 @@
 }
 
 .type-sick{
-    border: var(--base-border-width) solid var(--color-sick);
+    border: var(--base-border-width) solid var(--color-sick) !important;
 }
 
 .type-family{
-    border: var(--base-border-width) solid var(--color-family);
+    border: var(--base-border-width) solid var(--color-family) !important;
 }
 
 .type-trip{
-    border: var(--base-border-width) solid var(--color-trip);
+    border: var(--base-border-width) solid var(--color-trip) !important;
 }
 
 .type-sick-filled{

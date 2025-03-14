@@ -1,15 +1,17 @@
+import Attachment from "../../../models/Attachmet";
 import RequestInfoModel from "../../../models/RequstModel";
 import { RequestTypes } from "../../../types/request";
 import { Roles } from "../../../types/user";
 import BaseProps from "../../Base/BasePropsInterface";
-import Input from "../../inputs/input";
+import CustomInput from "../../inputs/CustomInput";
 import { StatusChip, TypeChip } from "../chips/Chips";
 
 interface RequestFullProps extends BaseProps{
     isEditable?: boolean,
     isNew?: boolean,
     request?: RequestInfoModel,
-    roles?: Roles[]
+    roles?: Roles[],
+    changeRequest?: (newRequest: RequestInfoModel) => {}
 }
 
 function RequestFull(props: RequestFullProps){
@@ -26,6 +28,22 @@ function RequestFull(props: RequestFullProps){
                 return "type-trip"
         }
     }
+
+    const addFile = () => {}
+
+    const prolonge = () => {}
+
+    const createNewRequest = () => {}
+
+    const setType = () => {}
+
+    const setStatus = () => {}
+
+    const check = () => {}
+
+    const editStartDate = () => {}
+
+    const onChange = () => {}
 
     return (
         //flex-grow-1 card-view align-self-stretch p-2
@@ -48,17 +66,73 @@ function RequestFull(props: RequestFullProps){
                                     type={request.requestType}
                                 />
                             </div>
-                            <div className="input-group p-4">
-                                <Input
+                            <div className="input-group w-100 p-4 d-flex dlex-row">
+                                <CustomInput
                                     inputType="date"
-                                    placehodler="Начальная дата"
-                                    classAttr=""
+                                    placehodler="дата начала"
+                                    className="flex-grow-1"
+                                    classAttr={`form-control ${requestStyle(request.requestType)}`}
+                                    onChange={editStartDate}
                                 />
+                                <CustomInput
+                                    inputType="date"
+                                    placehodler="дата начала"
+                                    className="flex-grow-1"
+                                    classAttr={`form-control ${requestStyle(request.requestType)}`}
+                                    onChange={prolonge}
+                                />
+                            </div>
+                            <div className="form-check w-100 p-4 mx-4">
+
+                                <input type='checkbox' className="form-check-input check-big" id="check" onChange={(e) => {check()}}/>
+                                
+                                <label className="form-check-label h3" htmlFor="check">Документ в деканате</label>
+                            </div>
+
+                            <div 
+                                style={
+                                    {
+                                        border: "2px dashed gray"
+                                    }
+                                }
+
+                                className="h-25 d-flex rounded justify-content-center align-items-center m-2 p-4"
+                            >
+
+                                Добавить файл
+                            </div>
+                            <div style={{overflowY: 'scroll'}}>
+                                {request.attachments.map((el, it) => {
+                                    return <AttachmentInfo attachment={el} key={`${request.id}_attachment_${it}`}/>
+                                })}
                             </div>
                         </form>
                     </div>
                 }
             </div>
+    )
+}
+
+interface AttachmentProps{
+    attachment: Attachment
+}
+
+function AttachmentInfo (props: AttachmentProps){
+
+
+    return (
+        <div 
+        className="rounded d-flex justify-content-between align-items-center p-3 m-2"
+         style={{
+            border: '2px solid gray'
+         }}>
+            
+        <span>{props.attachment.fileName}</span>
+        <div className="d-flex flex-column justify-content-center align-items-center">
+            <span>добавлен</span>
+            <div className="chip-type-sick rounded">{props.attachment.date?.toDateString()}</div>
+        </div>
+        </div>
     )
 }
 

@@ -7,6 +7,7 @@ import RequestInfo from "../Requests/requestInfo/RequestInfo";
 
 import './RequestList.css'
 import RequestFull from "../Requests/RequestFull/RequestFull";
+import { data } from "react-router-dom";
 
 
 interface RequestListProps extends BaseProps{
@@ -23,7 +24,7 @@ function RequestList(props: RequestListProps){
           "id1",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [new Attachment( "Aboba.txt", new Date())],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.inQueue,

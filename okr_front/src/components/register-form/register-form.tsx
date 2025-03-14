@@ -29,21 +29,25 @@ function Registration(props: registerProps){
             <Input
             placehodler={"Адрес электронной почты"}
             inputType={"email"}
+            className={'input-group'}
             classAttr={"form-control auth-input"}
             onChange={(e) => setEmail(e.target.value)}/>
             <Input
             placehodler={"Фамилия имя отчество"}
             inputType={"text"}
+            className={'input-group'}
             classAttr={"form-control auth-input"}
             onChange={(e) => setName(e.target.value)}/>
             <Input
             placehodler={"Дата рождения"}
             inputType={"Date"}
+            className={'input-group'}
             classAttr={"form-control auth-input"}
             onChange={(e) => setDate(e.target.value)}/>
             <Input
             placehodler={"Пароль"}
             inputType={"password"}
+            className={'input-group'}
             classAttr={"form-control auth-input"}
             onChange={(e) => setPassword(e.target.value)}/>
             <CustomBtn
