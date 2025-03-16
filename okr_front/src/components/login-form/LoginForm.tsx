@@ -31,11 +31,13 @@ function Login(props: loginProps){
             placehodler={"Адрес электронной почты"}
             inputType={"email"}
             classAttr={"form-control auth-input"}
+            className={'input-group'}
             onChange={(e) => setEmail(e.target.value)}/>
             <Input
             placehodler={"Пароль"}
             inputType={"password"}
             classAttr={"form-control auth-input"}
+            className={'input-group'}
             onChange={(e) => setPassword(e.target.value)}/>
             <CustomBtn
             buttonType={"submit"}

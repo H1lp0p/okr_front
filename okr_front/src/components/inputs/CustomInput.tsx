@@ -11,7 +11,7 @@ interface inputProps extends BaseProps{
 
 function CustomInput(props: inputProps){
     return (
-        <div className={'input-group' + ` ${(props.className != undefined)? props.className:""}`}>
+        <div className={'' + ` ${(props.className != undefined)? props.className:""}`}>
             <input type={props.inputType} className={props.classAttr} id={"input-" + props.inputType} placeholder={props.placehodler} onChange={props.onChange}/>
         </div>
     )
