@@ -1,3 +1,4 @@
+import { data } from "react-router-dom";
 import Attachment from "../../../models/Attachmet";
 import RequestInfoModel from "../../../models/RequstModel";
 import { RequestTypes } from "../../../types/request";
@@ -5,6 +6,9 @@ import { Roles } from "../../../types/user";
 import BaseProps from "../../Base/BasePropsInterface";
 import CustomInput from "../../inputs/CustomInput";
 import { StatusChip, TypeChip } from "../chips/Chips";
+
+import './RequestFull.css'
+import { EventHandler } from "react";
 
 interface RequestFullProps extends BaseProps{
     isEditable?: boolean,
@@ -29,8 +33,6 @@ function RequestFull(props: RequestFullProps){
         }
     }
 
-    const addFile = () => {}
-
     const prolonge = () => {}
 
     const createNewRequest = () => {}
@@ -46,8 +48,7 @@ function RequestFull(props: RequestFullProps){
     const onChange = () => {}
 
     return (
-        //flex-grow-1 card-view align-self-stretch p-2
-        <div className={`${props.className}`}>
+        <div className={`request-full ${props.className}`}>
                 {!request && <PlaceHolder/>}
                 {request && 
                     <div className={`rounded h-100 w-100 ${requestStyle(request.requestType)}`}>
@@ -92,7 +93,7 @@ function RequestFull(props: RequestFullProps){
                             <div 
                                 className={`${requestStyle(request.requestType)}-dashed h-25 d-flex rounded justify-content-center align-items-center m-2 p-4`}
                             >
-
+                                <input type="file" id="file_input" style={{display: "none"}}></input>
                                 Добавить файл
                             </div>
                             <div style={{overflowY: 'scroll'}}>
@@ -113,6 +114,11 @@ interface AttachmentProps extends BaseProps{
 
 function AttachmentInfo (props: AttachmentProps){
 
+    const {date, file, fileName} = props.attachment
+
+    const toStr = (date: Date) => {
+        return `${date.getDate() < 10 ? "0" + date.getDate(): date.getDate()}.${date.getMonth() < 10 ? "0"+date.getMonth() : date.getMonth()}.${date.getFullYear()}`
+    }
 
     return (
         <div 
@@ -121,10 +127,14 @@ function AttachmentInfo (props: AttachmentProps){
             border: '2px solid gray'
          }}>
             
-        <span>{props.attachment.fileName}</span>
+        <span>{fileName}</span>
         <div className="d-flex flex-column justify-content-center align-items-center">
-            <span>добавлен</span>
-            <div className={`chip-${props.className} rounded`}>{props.attachment.date?.toDateString()}</div>
+            {date && 
+                <>
+                    <span>добавлен</span>
+                    <div className={`chip-${props.className} rounded`}>{toStr(date)}</div>
+                </>
+            }
         </div>
         </div>
     )

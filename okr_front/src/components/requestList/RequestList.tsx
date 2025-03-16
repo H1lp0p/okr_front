@@ -26,7 +26,7 @@ function RequestList(props: RequestListProps){
           new Date(),
           [new Attachment( "Aboba.txt", new Date())],
           "Вася Полушкин",
-          ["972303"],
+          ["972303", "98123", "123235"],
           RequestStatuses.inQueue,
           RequestTypes.sick
         ),
