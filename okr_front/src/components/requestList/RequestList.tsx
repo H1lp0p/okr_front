@@ -8,10 +8,10 @@ import RequestInfo from "../Requests/requestInfo/RequestInfo";
 import './RequestList.css'
 import RequestFull from "../Requests/RequestFull/RequestFull";
 import { data } from "react-router-dom";
+import { Roles } from "../../types/user";
 
 
 interface RequestListProps extends BaseProps{
-
 
 }
 
@@ -24,7 +24,9 @@ function RequestList(props: RequestListProps){
           "id1",
           new Date(),
           new Date(),
-          [new Attachment( "Aboba.txt", new Date())],
+          [
+            new Attachment( "Aboba.txt", new Date()),
+          ],
           "Вася Полушкин",
           ["972303", "98123", "123235"],
           RequestStatuses.inQueue,
@@ -34,7 +36,7 @@ function RequestList(props: RequestListProps){
           "id2",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.approved,
@@ -44,7 +46,7 @@ function RequestList(props: RequestListProps){
           "id3",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.denied,
@@ -54,7 +56,7 @@ function RequestList(props: RequestListProps){
           "id4",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.denied,
@@ -64,7 +66,7 @@ function RequestList(props: RequestListProps){
           "id5",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.denied,
@@ -74,7 +76,7 @@ function RequestList(props: RequestListProps){
           "id6",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.denied,
@@ -84,7 +86,7 @@ function RequestList(props: RequestListProps){
           "id7",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.denied,
@@ -94,7 +96,7 @@ function RequestList(props: RequestListProps){
           "id8",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.denied,
@@ -104,7 +106,7 @@ function RequestList(props: RequestListProps){
           "id9",
           new Date(),
           new Date(),
-          [new Attachment()],
+          [],
           "Вася Полушкин",
           ["972303"],
           RequestStatuses.denied,
@@ -119,6 +121,10 @@ function RequestList(props: RequestListProps){
         else{
             setSelected(newSelected)
         }
+    }
+
+    const editRequest = (newRequest : RequestInfoModel) => {
+      setSelected(newRequest)
     }
     
     return (
@@ -136,11 +142,24 @@ function RequestList(props: RequestListProps){
                 })}
             </div>
 
-            <RequestFull
-            className="flex-grow-1 card-view align-self-stretch p-2"
-                request={selectedItem}/>
+            {selectedItem && 
+              <RequestFull
+                  className="flex-grow-1 card-view align-self-stretch p-2"
+                  request={selectedItem}
+                  changeRequest={editRequest}
+                  maxUserRole={Roles.worker}/>
+            }
+            {!selectedItem && <PlaceHolder/>}
         </div>
     )
+}
+
+const PlaceHolder = () => {
+  return (
+      <div className="flex-grow-1 card-view align-self-stretch p-2 jsutify-content-center align-items-center">
+          <span>Выберите запрос</span>
+      </div>
+  )
 }
 
 export default RequestList

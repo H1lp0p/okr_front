@@ -58,13 +58,3 @@ body{
 .text-secondary{
   color: #717171;
 }
-
-.check-big{
-  transform: scale(2);
-  align-self: center;
-}
-
-.check-big:checked{
-  background-color: var(--color-sick);
-  border-color: var(--color-sick);
-}

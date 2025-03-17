@@ -46,12 +46,6 @@ function Body() {
         logout={logout}/>
       <Routes>
         <Route path="/" element={<>
-          <span>Мы делаем фронт, честно</span><br/>
-          <button
-          className='btn btn-primary' 
-          onClick={(event) => {login("a", "b")}}>Тестовый login</button>
-          
-          
           <RequestList
             className=''
           />

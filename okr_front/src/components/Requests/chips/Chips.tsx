@@ -26,7 +26,8 @@ function DateGroup(props: DateGroupProps){
 interface TypeChipProps{
     className?: string,
     type: RequestTypes,
-    selected?: Boolean
+    selected?: Boolean,
+    onClick?: () => void
 }
 
 function TypeChip(props: TypeChipProps){
@@ -43,7 +44,9 @@ function TypeChip(props: TypeChipProps){
     }
 
     return (
-        <div className={`chip chip-${requestStyle(props.type)} ${props.className}`}>
+        <div
+        onClick={() => {props.onClick ? props.onClick!() : null}} 
+        className={`chip chip-${requestStyle(props.type)} ${props.className}`}>
             {requestTypeText(props.type)}
         </div>
     )
