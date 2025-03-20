@@ -28,13 +28,13 @@ function Body() {
 
   const login = (email: string, password: string) => {
     user.login(email, password).then(res => {
-      console.log("SET", res);
+      console.log("LOGIN", res);
         setUser(prewUser => res);
     })
   }
   const register = (email: string, name:string, bithdate: string,  password: string) => {
     user.register(name.split(" ")[1], email, name.split(" ")[0], name.split(" ")[2], bithdate, password).then(res => {
-      console.log("SET", res);
+      console.log("REGISTER", res);
       setUser(prewUser => res);
     })
   }
@@ -49,7 +49,7 @@ function Body() {
           <RequestList
             className=''
             isMainPage={true}
-            userRoles={user.Roles}
+            user={user}
           />
 
         </>}/>
@@ -57,7 +57,7 @@ function Body() {
           <RequestList
           className=''
           isMainPage={false}
-          userRoles={user.Roles}
+          user={user}
         />
         }/>
         <Route path="/login" element={<Login login={login}/>}/>

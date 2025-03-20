@@ -46,7 +46,7 @@ const endpoint = {
                     'Authorization': `Bearer ${jwt}`
                 }
             }).then(response => response.json()).then(res => {
-                console.log(res);
+                console.log("info!", res);
                 return res
             })
             .catch(error => {throw new Error(error)})

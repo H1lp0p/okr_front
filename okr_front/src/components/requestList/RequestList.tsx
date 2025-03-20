@@ -9,10 +9,11 @@ import './RequestList.css'
 import RequestFull from "../Requests/RequestFull/RequestFull";
 import { data } from "react-router-dom";
 import { Roles } from "../../types/user";
+import UserModel from "../../models/UserModel";
 
 
 interface RequestListProps extends BaseProps{
-  userRoles? : Roles[],
+  user : UserModel,
   isMainPage?: boolean
 }
 
@@ -20,9 +21,11 @@ function RequestList(props: RequestListProps){
 
     const newItemId = "-1"
 
+    const {user} = props
+
     const [selectedItem, setSelected] = useState<RequestInfoModel>()
 
-    const roles = props.userRoles ? props.userRoles : []
+    const roles = user.Roles
     
     const isMaindPage = props.isMainPage ? props.isMainPage : true
 
@@ -126,6 +129,8 @@ function RequestList(props: RequestListProps){
         )
     ]
 
+
+    //TODO: groups from back
     const select = (newSelected: RequestInfoModel) => {
         if (selectedItem && newSelected.id == selectedItem.id){
             setSelected(new RequestInfoModel(
@@ -133,8 +138,8 @@ function RequestList(props: RequestListProps){
               new Date(),
               new Date(),
               [],
-              "need data from body",
-              ["need data"],
+              `${user.Name} ${user.Surname} ${user.Patronymic}`,
+              ["TODO: data from back"],
               RequestStatuses.inQueue,
               RequestTypes.sick
             ))
