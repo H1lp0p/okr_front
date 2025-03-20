@@ -1,0 +1,21 @@
+/* Кастомные стили для закругленных углов таблицы */
+.rounded-table {
+    border-radius: 10px; /* Закругление углов */
+    overflow: hidden; /* Скрытие углов, чтобы они не выходили за пределы таблицы */
+}
+
+.rounded-table th:first-child {
+    border-top-left-radius: 10px; /* Закругление верхнего левого угла */
+}
+
+.rounded-table th:last-child {
+    border-top-right-radius: 10px; /* Закругление верхнего правого угла */
+}
+
+.rounded-table tr:last-child td:first-child {
+    border-bottom-left-radius: 10px; /* Закругление нижнего левого угла */
+}
+
+.rounded-table tr:last-child td:last-child {
+    border-bottom-right-radius: 10px; /* Закругление нижнего правого угла */
+}
