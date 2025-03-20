@@ -41,6 +41,7 @@ function RequestFull(props: RequestFullProps){
 
     const role = props.maxUserRole ? props.maxUserRole : Roles.student
 
+    //NEW VERSION OF REQUEST
     const [newRequest, setNewRequest] = useState(request) 
 
     const [isEdited, setEdited] = useState(false)
@@ -51,7 +52,7 @@ function RequestFull(props: RequestFullProps){
         acceptedFiles.forEach((val, ind) => {
             console.log(val.name);
         })
-
+        //!!!NEW ATTACHMENT
         let newAttachments = acceptedFiles.map((el) => {
             return new Attachment(el.name, new Date(), el)
         })
@@ -140,6 +141,9 @@ function RequestFull(props: RequestFullProps){
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        if (props.changeRequest){
+            props.changeRequest(newRequest)
+        }
         //There we need to call changeRequest with new data (probably need to pass each data field seperately)
         //And in RequestList in func editRequest will be all fetches.
     }

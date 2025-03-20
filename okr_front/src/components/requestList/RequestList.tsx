@@ -12,7 +12,7 @@ import { Roles } from "../../types/user";
 
 
 interface RequestListProps extends BaseProps{
-
+  userRoles? : Roles[]
 }
 
 function RequestList(props: RequestListProps){
@@ -116,7 +116,16 @@ function RequestList(props: RequestListProps){
 
     const select = (newSelected: RequestInfoModel) => {
         if (selectedItem && newSelected.id == selectedItem.id){
-            setSelected(undefined)
+            setSelected(new RequestInfoModel(
+              "-1",
+              new Date(),
+              new Date(),
+              [],
+              "need data from body",
+              ["need data"],
+              RequestStatuses.inQueue,
+              RequestTypes.sick
+            ))
         }
         else{
             setSelected(newSelected)
@@ -126,6 +135,12 @@ function RequestList(props: RequestListProps){
     //there we need to compare selectedItem and newRequest.
     //And if we need to change dates - fetch "prolonge" request, if we need to change status - fetch "setStatus" and exc.
     const editRequest = (newRequest : RequestInfoModel) => {
+      if (newRequest.id == null){
+
+      }
+      if (newRequest.endDate != selectedItem?.endDate){
+        //fetch prolonge
+      }
       setSelected(newRequest)
     }
     
@@ -144,8 +159,11 @@ function RequestList(props: RequestListProps){
                 })}
             </div>
 
+
+            {/* Need to get user Roles, so transfer it throu Body (edit props of this component) */}
             {selectedItem && 
               <RequestFull
+              isNew={false}
                   className="flex-grow-1 card-view align-self-stretch p-2"
                   request={selectedItem}
                   changeRequest={editRequest}
