@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './Body.css'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from '../login-form/LoginForm';
-import Registration from '../register-form/Register-form';
+import Registration from '../register-form/register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
 import BaseProps from '../Base/BasePropsInterface'
@@ -61,11 +61,18 @@ function Body() {
 
         </>}/>
         <Route path='/worker' element={
-          <RequestList
-          className=''
-          isMainPage={false}
-          user={user}
-        />
+          <>
+            <Filter 
+              onSubmin={gant}
+            />
+            <RequestList
+              className='h-75'
+              isMainPage={false}
+              user={user}
+              filtration={filterState}
+            />
+          </>
+          
         }/>
         <Route path="/login" element={
           <Login

@@ -65,8 +65,9 @@ const endpoint = {
         }
     },
     worker: {
-        getRequests: (jwt: string, filtration: FiltrationInterface) => {
-            return fetch(UrlBuilder.requests.getAll(), {
+        getRequests: (jwt: string, filtration: FiltrationInterface, pagination: {page: number, pageSize: number}) => {
+            let query = new URLSearchParams({...filtration, pageIndex: pagination.page.toString(), pageSize: pagination.pageSize.toString()})
+            return fetch(`${UrlBuilder.requests.getAll()}?${query.toString()}`, {
                 method: "GET",
                 headers: {
                     "Authorization": `Bearer ${jwt}`

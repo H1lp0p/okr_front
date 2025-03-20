@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import Attachment from "../../models/Attachmet";
 import RequestInfoModel from "../../models/RequstModel";
-import { RequestStatuses, RequestTypes } from "../../types/request";
+import { RequestStatuses, RequestTypes, toStatus, toType } from "../../types/request";
 import BaseProps from "../Base/BasePropsInterface";
 import RequestInfo from "../Requests/requestInfo/RequestInfo";
 
@@ -12,12 +12,18 @@ import { Roles } from "../../types/user";
 import UserModel from "../../models/UserModel";
 import endpoint from "../../api/endpoints";
 import FiltrationInterface from "../../types/filtraton";
+import { filterInterface } from "../filterForm/FilterForm";
 
 
 interface RequestListProps extends BaseProps{
   user : UserModel,
   isMainPage?: boolean,
-  filtration?: FiltrationInterface
+  filtration?: filterInterface
+}
+
+interface Pagination{
+  pageIndex: number,
+  pageSize: number
 }
 
 function RequestList(props: RequestListProps){
@@ -177,23 +183,187 @@ function RequestList(props: RequestListProps){
       setSelected(newRequest)
     }
 
-    const filtration = props.filtration ? props.filtration : {
+    const filtration = props.filtration ? props.filtration : {} as filterInterface
 
-    } as FiltrationInterface
+    const [currentPage, setPage] = useState(0)
+    const [pageSize, setSize] = useState(3)
 
-    const [currentPagination, setPagination] = useState(0)
-    
     const [currentData, setData] = useState<RequestInfoModel[]>([])
 
+    const [itemsCount, setCount] = useState(0)
+
+    const [isLoading, setLoading] = useState(false)
+
+    const [pageLoading, setPageLoading] = useState(false)
+
+    const [isMyFetching,setIsFetchingDown]=useState(false)
+
+    const scrollHandler = (e: any) : void => {
+      const target = e.target as HTMLElement;
+      
+      if (!target || !target.scrollHeight) return;
+
+      const currentScrollTop = target.scrollTop;
+      const scrollHeight = target.scrollHeight;
+      const clientHeight = target.clientHeight;
+
+      //console.log("SCROLL", currentScrollTop, scrollHeight, clientHeight);
+
+      if (scrollHeight - currentScrollTop - clientHeight < 50) {
+        const scrollPosition = currentScrollTop;
+        
+        setIsFetchingDown(true);
+
+        const newScrollHeight = target.scrollHeight;
+        const newScrollTop = scrollPosition + (newScrollHeight - scrollHeight);
+        
+        target.scrollTop = newScrollTop;
+      }
+    }
+
     useEffect(() => {
-      endpoint.worker.getRequests(user.Jwt!, filtration).then(result => {
+      if (isMyFetching){
+        
+        //console.log("DOWN");
+        
+        if (currentPage < itemsCount){
+          //console.log("awailable");
+          
+          setPage(prew => {
+            prew += 1
+            return prew
+          })
+        }
+
+        setIsFetchingDown(false)
+      }
+    }, [isMyFetching])
+
+    useEffect(() => {
+      //console.log("UPDATE");
+      
+      setPageLoading(true)
+      console.log(currentPage);
+      
+      endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
         let pagination = result.paginationDto
+        console.log(pagination);
         let data = result.requests
 
-        setPagination(pagination)
-        setData(data)
+        let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
+          let attachments = el.confirmationFiles
+
+          let atts:Attachment[] = []
+
+          atts = attachments.map((att: any) => {
+            return new Attachment(att.name,
+              new Date(att.attachDate),
+              undefined,
+              el.id
+            )
+          })
+
+          return new RequestInfoModel(
+            el.id,
+            new Date(el.startDate),
+            new Date(el.endDate),
+            atts,
+            el.creator.name,
+            [el.creator.groupName],
+            toStatus(el.status),
+            toType(el.type)
+          )
+        })
+
+        let newArray = [...currentData, ...arrayOfRequests]
+
+        setData(newArray)
+        console.log(newArray);
+        
+        setPageLoading(false)
+      })
+    }, [currentPage])
+
+    useEffect(() => {
+      setLoading(true)
+      endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
+        let pagination = result.paginationDto
+        console.log(pagination);
+        
+        let data = result.requests
+
+        let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
+          let attachments = el.confirmationFiles
+
+          let atts:Attachment[] = []
+
+          atts = attachments.map((att: any) => {
+            return new Attachment(att.name,
+              new Date(att.attachDate),
+              undefined,
+              el.id
+            )
+          })
+
+          return new RequestInfoModel(
+            el.id,
+            new Date(el.startDate),
+            new Date(el.endDate),
+            atts,
+            el.creator.name,
+            [el.creator.groupName],
+            toStatus(el.status),
+            toType(el.type)
+          )
+        })
+
+        setData(arrayOfRequests)
+
+        setCount(pagination.count)
+        console.log(itemsCount);
+        
+
+        console.log(arrayOfRequests);
+        setLoading(false)
       })
     }, [])
+
+    // useEffect(() => {
+    //   setLoading(true)
+    //   endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPagination.pageIndex, pageSize: currentPagination.pageSize}).then(result => {
+    //     let pagination = result.paginationDto
+    //     let data = result.requests
+
+    //     let arrayOfRequests = data.map((el: any) => {
+    //       let attachments = el.confirmationFiles
+
+    //       let atts:Attachment[] = []
+
+    //       atts = attachments.map((att: any) => {
+    //         return new Attachment(att.name,
+    //           new Date(att.attachDate),
+
+    //         )
+    //       })
+
+    //       return new RequestInfoModel(
+    //         el.id,
+    //         el.startDate,
+    //         el.endDate,
+    //         atts,
+    //         el.creator.name,
+    //         [el.creator.groupName],
+    //         el.status,
+    //         el.type
+    //       )
+    //     })
+
+    //     setPagination(pagination)
+    //     setData(arrayOfRequests)
+
+    //     console.log(arrayOfRequests);
+    //   })
+    // }, [filtration])
 
     return (
         <div className={`d-flex flex-row w-100 align-self-stretch justify-content-center ${props.className}`}>
@@ -201,17 +371,28 @@ function RequestList(props: RequestListProps){
 
               {maxUserRole == Roles.student && <button className={`btn btn-secondary btn-lg m-4`} onClick={() => {addNewRequest()}}>Новый запрос</button>}
 
-              <div className={`card-view list-view`}>
-                  {array.map((el, it) => {
-                      return (
-                          <RequestInfo
-                              onSelect={select}
-                              selectedId={selectedItem? selectedItem.id : ""}
-                              request={el}
-                              key={`${el.id}_${it}`}
-                          />
-                      )
-                  })}
+              <div className={`card-view list-view h-25`} onScroll={scrollHandler}>
+                  {!isLoading && 
+                    <>
+                      {currentData.map((el, it) => {
+                        return (
+                          <>
+                            <RequestInfo
+                                onSelect={select}
+                                selectedId={selectedItem? selectedItem.id : ""}
+                                request={el}
+                                key={`${el.id}_${it}`}
+                            />
+                          </>
+                            
+                        )
+                      })}
+                      {pageLoading && <div className={`w-100 py-3 text-center text-secondary h6`}>Подгружаем...</div>}
+                    </>
+                    }
+                  {isLoading && 
+                  <div className={`w-100 text-center py-3 text-secondary h6`}>Загрузка...</div>
+                  }
               </div>
             </div>
             
