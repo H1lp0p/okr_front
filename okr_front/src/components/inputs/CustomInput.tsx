@@ -1,7 +1,6 @@
 import BaseProps from "../Base/BasePropsInterface";
 import "./input.css";
 import 'bootstrap';
-import TextField from "../../types/Fields"
 
 interface inputProps extends BaseProps{
     inputType: string,

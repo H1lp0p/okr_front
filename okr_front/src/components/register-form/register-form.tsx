@@ -29,36 +29,36 @@ function Registration(props: registerProps){
             <Input
             placehodler={"Адрес электронной почты"}
             inputType={"email"}
-            classAttr={"form-control auth-input"}
+            classAttr={" auth-input"}
             onChange={(e) => setEmail(e.target.value)}
-            className={'input-group'}
+            className={"form-group" +' input-group'}
             invalidFeedback={'Введите корректный адресс электронной почты: example@example.com'}
             validFeedback={''}
             required={true}/>
             <Input
             placehodler={"Фамилия имя отчество"}
             inputType={"text"}
-            classAttr={"form-control auth-input"}
+            classAttr={" auth-input"}
             onChange={(e) => setName(e.target.value)}
-            className={'input-group'}
+            className={"form-group" +' input-group'}
             invalidFeedback={'Введите Фамилию, имя и отчество корректно: Иванов Иван Иванович'}
             validFeedback={''}
             required={true}/>
             <Input
             placehodler={"Дата рождения"}
             inputType={"Date"}
-            classAttr={"form-control auth-input"}
+            classAttr={" auth-input"}
             onChange={(e) => setDate(e.target.value)}
-            className={'input-group'}
+            className={"form-group" + ' input-group'}
             invalidFeedback={'Введите дату рождения!'}
             validFeedback={''}
             required={true}/>
             <Input
             placehodler={"Пароль"}
             inputType={"password"}
-            classAttr={"form-control auth-input"}
+            classAttr={" auth-input"}
             onChange={(e) => setPassword(e.target.value)}
-            className={'input-group'}
+            className={"form-group" + ' input-group'}
             invalidFeedback={'Введите пароль'}
             validFeedback={''}
             required={true}/>

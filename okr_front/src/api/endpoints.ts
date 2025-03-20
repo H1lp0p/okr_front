@@ -1,47 +1,43 @@
 import { jsx } from "react/jsx-runtime"
 import { Roles } from "../types/user"
-
-const baseUrl = "http://90.188.93.70:39965/";
+import UrlBuilder from "./urlBuilder";
 
 const endpoint = {
     user: {
         login: async (data : {email: string, password: string}) => {
-            try {const response = await fetch (baseUrl + 'account/login',{
+            return fetch (UrlBuilder.user.login(),{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data)
-                });
-                const res = await response.json();
-                if (response.ok){
-                    console.log("Login success!")
-                    return res;
-                }else{
-                    console.log(res.message);
-                }
-                }catch(error){
-                    console.error(error);
-                };
+                }).then(response => {
+                    if (response.ok){
+                        return response.json();
+                    }else{
+                        throw new Error('Login is failed!')
+                    }
+                }).then(res => {
+                    return res
+                }).catch((error) => {throw new Error(error)});
         },
+
         registration: async (data : {username: string, email: string, surname:string, patronymic: string, bithdate: string,  password: string}) => {
-            try {const response = await fetch (baseUrl + 'account/register',{
+            return fetch (UrlBuilder.user.register(),{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify(data)
-                });
-                const res = await response.json();
-                if (response.ok){
-                    console.log("Registration success!")
-                    return res;
-                }else{
-                    console.log(res.message);
-                }
-                }catch(error){
-                    console.error(error);
-                };
+                }).then(response => {
+                    if (response.ok){
+                        return response.json()
+                    }else{
+                        throw new Error('Registration is failed!')
+                    }
+                }).then(res => {
+                    return res
+                }).catch((error) => {throw new Error(error)})
         },
         info: (jwt: string) => {
             return new Promise(resolver => setTimeout(resolver, 100)).then(res => {
