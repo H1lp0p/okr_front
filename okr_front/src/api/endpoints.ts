@@ -22,7 +22,7 @@ const endpoint = {
                 }).catch((error) => {throw new Error(error)});
         },
 
-        registration: async (data : {username: string, email: string, surname:string, patronymic: string, bithdate: string,  password: string}) => {
+        registration: async (data : {name: string, email: string, surname:string, patronymic: string, bithdate: string,  password: string}) => {
             return fetch (UrlBuilder.user.register(),{
                 method: "POST",
                 headers: {
@@ -40,20 +40,16 @@ const endpoint = {
                 }).catch((error) => {throw new Error(error)})
         },
         info: (jwt: string) => {
-            return new Promise(resolver => setTimeout(resolver, 100)).then(res => {
-                return {
-                    name: "Василий",
-                    surname: "Полушкин",
-                    patronymic: "Игоревич",
-                    email: "john@email.com",
-                    role: [
-                      Roles.student,
-                      Roles.teacher,
-                      Roles.worker,
-                      Roles.admin
-                    ]
-                  }
+            return fetch(UrlBuilder.user.getInfo(), {
+                method: "GET",
+                headers: {
+                    'Authorization': `Bearer ${jwt}`
+                }
+            }).then(response => response.json()).then(res => {
+                console.log(res);
+                return res
             })
+            .catch(error => {throw new Error(error)})
         }
     }
 }

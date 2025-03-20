@@ -149,7 +149,7 @@ function RequestFull(props: RequestFullProps){
     }
 
     return (
-        <form onSubmit={onSubmit} className={`d-flex flex-column`}>
+        <form onSubmit={onSubmit} className={`d-flex flex-column ${props.className}`}>
             <div className={`m-2 request-full ${props.className}`}>
                 <div className={`rounded h-100 w-100 pe-3 ${requestClassName}`} style={{overflowY: "scroll", overflowX: 'clip', maxHeight: "75vh"}}>
                     
