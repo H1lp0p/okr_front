@@ -1,6 +1,6 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import './Body.css'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import {Routes, Route, Link, useNavigate} from 'react-router-dom';
 import Login from '../login-form/LoginForm';
 import Registration from '../register-form/register-form';
 import UserModel from '../../models/UserModel'
@@ -9,12 +9,13 @@ import BaseProps from '../Base/BasePropsInterface'
 import RequestInfo from '../Requests/requestInfo/RequestInfo'
 import RequestInfoModel from '../../models/RequstModel'
 import Attachment from '../../models/Attachmet'
-import { RequestStatuses, RequestTypes } from '../../types/request'
+import {RequestStatuses, RequestTypes} from '../../types/request'
 import RequestList from '../requestList/RequestList';
 import Filter, {filterInterface} from '../filterForm/FilterForm';
 import endpoint from '../../api/endpoints';
+import GanttTable from "../gant/gant.tsx";
 
-interface BodyProps extends BaseProps{
+interface BodyProps extends BaseProps {
 
 }
 
@@ -46,6 +47,130 @@ function Body() {
       setFilterState(formData);
     }
 
+  // Типы для данных
+    type Request = {
+        startDate: string;
+        endDate: string;
+        type: string;
+    };
+
+    type Student = {
+        surname: string;
+        name: string;
+        patronymic: string;
+        requests: Request[];
+    };
+
+    type Group = {
+        groupName: string | null;
+        students: Student[];
+    };
+
+    type Data = {
+        groups: Group[];
+    };
+
+
+    const data: Data = {
+        "groups": [
+            {
+                "groupName": "zalupaKonya",
+                "students": [
+                    {
+                        "surname": "string",
+                        "name": "string",
+                        "patronymic": "string",
+                        "requests": [
+                            {
+                                "startDate": "2025-03-16",
+                                "endDate": "2025-03-16",
+                                "type": "FAMILY"
+                            },
+                            {
+                                "startDate": "2025-03-16",
+                                "endDate": "2025-03-16",
+                                "type": "SICK"
+                            },
+                            {
+                                "startDate": "2025-03-17",
+                                "endDate": "2025-03-17",
+                                "type": "FAMILY"
+                            },
+                            {
+                                "startDate": "2025-03-17",
+                                "endDate": "2025-03-17",
+                                "type": "FAMILY"
+                            },
+                            {
+                                "startDate": "2025-03-17",
+                                "endDate": "2025-03-17",
+                                "type": "FAMILY"
+                            },
+                            {
+                                "startDate": "2025-03-17",
+                                "endDate": "2025-03-17",
+                                "type": "FAMILY"
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "groupName": null,
+                "students": [
+                    {
+                        "surname": "ramiel",
+                        "name": "ramiel",
+                        "patronymic": "ramiel",
+                        "requests": []
+                    },
+                    {
+                        "surname": "Ядп",
+                        "name": "Алекс",
+                        "patronymic": "Дм",
+                        "requests": []
+                    },
+                    {
+                        "surname": "f",
+                        "name": "f",
+                        "patronymic": "f",
+                        "requests": []
+                    },
+                    {
+                        "surname": "Ivchenko",
+                        "name": "Ivan",
+                        "patronymic": "Ivanovich",
+                        "requests": []
+                    },
+                    {
+                        "surname": "Kovalenko",
+                        "name": "Sofya",
+                        "patronymic": "Alekseevna",
+                        "requests": []
+                    },
+                    {
+                        "surname": "string1@gmail.com",
+                        "name": "string1@gmail.com",
+                        "patronymic": "string1@gmail.com",
+                        "requests": []
+                    },
+                    {
+                        "surname": "ramiel",
+                        "name": "ramiel",
+                        "patronymic": "ramiel",
+                        "requests": []
+                    },
+                    {
+                        "surname": "string11@gmail.com",
+                        "name": "string11@gmail.com",
+                        "patronymic": "string11@gmail.com",
+                        "requests": []
+                    }
+                ]
+            }
+        ]
+    };
+      
   return (
     <>
       <Header
@@ -83,6 +208,7 @@ function Body() {
           <Filter 
             onSubmin={gant}
           />
+          <GanttTable data={data}/>
         {/*
           <Filter 
             onSubmin={gant}

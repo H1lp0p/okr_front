@@ -78,8 +78,8 @@ class UserModel{
             console.log("orel", this.Roles);
             console.log(res.roles.map((val: string) => {return this.getRolesKeyByValue(val)}))
             this.saveInst()
-            
-        }).then(res => true)
+
+        }).then(() => true)
     }
 
     private saveInst(): void {
@@ -116,7 +116,7 @@ class UserModel{
     }
 
     private getInst() : void{
-        let token = localStorage.getItem(UserStorageItems.token)
+        const token = localStorage.getItem(UserStorageItems.token)
         if (token != null){
             this.Jwt = token
             this.Email = localStorage.getItem(UserStorageItems.email)
