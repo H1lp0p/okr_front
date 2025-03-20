@@ -1,0 +1,6 @@
+.filterInput{
+    max-width: 320px !important;
+    min-height: 68px !important;
+    border-radius: 16px !important;
+    border-color: rgb(80, 80, 80) !important;
+}

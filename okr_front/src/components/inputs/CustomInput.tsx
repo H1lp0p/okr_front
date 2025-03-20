@@ -11,14 +11,16 @@ interface inputProps extends BaseProps{
     invalidFeedback?: string,
     label?: string,
     labelClassAttr? : string,
-    required: boolean
+    required: boolean,
+    name?:string,
+    checked?:boolean
 }
 
 function CustomInput(props: inputProps){
     return (
         <div className={`${(props.className != undefined)? props.className:""}`}>
-            {props.label && <label className={"label" + props.labelClassAttr? props.labelClassAttr: ""}></label>}
-            <input required={props.required} type={props.inputType} className={"form-control" + props.classAttr} id={"input-" + props.placehodler} placeholder={props.placehodler} onChange={props.onChange}/>
+            {props.label && <label className={"label" + props.labelClassAttr? props.labelClassAttr: ""}>{props.label}</label>}
+            <input required={props.required} type={props.inputType} className={`${(props.checked != undefined)?"form-check-input":"form-control" + props.classAttr}`} id={"input-" + props.name} placeholder={props.placehodler} onChange={props.onChange} checked={props.checked}/>
             {props.validFeedback && <div className="valid-feedback">{props.validFeedback}</div>}
             {props.invalidFeedback && <div className="invalid-feedback">{props.invalidFeedback}</div>}
         </div>
