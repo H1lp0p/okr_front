@@ -1,6 +1,7 @@
 import { jsx } from "react/jsx-runtime"
 import { Roles } from "../types/user"
 import UrlBuilder from "./urlBuilder";
+import FiltrationInterface from "../types/filtraton";
 
 const endpoint = {
     user: {
@@ -50,6 +51,18 @@ const endpoint = {
                 return res
             })
             .catch(error => {throw new Error(error)})
+        }
+    },
+    worker: {
+        getRequests: (jwt: string, filtration: FiltrationInterface) => {
+            return fetch(UrlBuilder.requests.getAll(), {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${jwt}`
+                }
+            }).then(response => {
+                return response.json()
+            }).catch(error => {throw new Error(error)})
         }
     }
 }

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Attachment from "../../models/Attachmet";
 import RequestInfoModel from "../../models/RequstModel";
 import { RequestStatuses, RequestTypes } from "../../types/request";
@@ -10,11 +10,14 @@ import RequestFull from "../Requests/RequestFull/RequestFull";
 import { data } from "react-router-dom";
 import { Roles } from "../../types/user";
 import UserModel from "../../models/UserModel";
+import endpoint from "../../api/endpoints";
+import FiltrationInterface from "../../types/filtraton";
 
 
 interface RequestListProps extends BaseProps{
   user : UserModel,
-  isMainPage?: boolean
+  isMainPage?: boolean,
+  filtration?: FiltrationInterface
 }
 
 function RequestList(props: RequestListProps){
@@ -27,11 +30,10 @@ function RequestList(props: RequestListProps){
 
     const roles = user.Roles
     
-    const isMaindPage = props.isMainPage ? props.isMainPage : true
+    const isMainPage = props.isMainPage ? props.isMainPage : true
 
-    const maxUserRole = (roles.indexOf(Roles.worker) != -1 && !isMaindPage)? Roles.worker : Roles.student
+    const maxUserRole = (roles.indexOf(Roles.worker) != -1 && !isMainPage)? Roles.worker : Roles.student
     
-    console.log(maxUserRole);
     
 
     let testArray = [
@@ -130,23 +132,37 @@ function RequestList(props: RequestListProps){
     ]
 
 
-    //TODO: groups from back
+    const [array, setArray] = useState(testArray)
+
+    
     const select = (newSelected: RequestInfoModel) => {
         if (selectedItem && newSelected.id == selectedItem.id){
-            setSelected(new RequestInfoModel(
-              newItemId,
-              new Date(),
-              new Date(),
-              [],
-              `${user.Name} ${user.Surname} ${user.Patronymic}`,
-              ["TODO: data from back"],
-              RequestStatuses.inQueue,
-              RequestTypes.sick
-            ))
+            setSelected(undefined)
+            setArray(array.filter((el) => { return el.id != newItemId}))
         }
         else{
             setSelected(newSelected)
+            setArray(array.filter((el) => { return el.id != newItemId}))
         }
+    }
+
+    //TODO: groups from back
+    const addNewRequest = () => {
+      if (array.findIndex((el) => {return el.id == newItemId}) == -1){
+        let newReq = new RequestInfoModel(
+          newItemId,
+          new Date(),
+          new Date(),
+          [],
+          `${user.Name} ${user.Surname}`,
+          ["TODO: data from back"],
+          RequestStatuses.inQueue,
+          RequestTypes.sick
+        )
+
+        setSelected(newReq)
+        setArray([newReq, ...array])
+      }
     }
 
     //there we need to compare selectedItem and newRequest.
@@ -160,15 +176,33 @@ function RequestList(props: RequestListProps){
       }
       setSelected(newRequest)
     }
+
+    const filtration = props.filtration ? props.filtration : {
+
+    } as FiltrationInterface
+
+    const [currentPagination, setPagination] = useState(0)
     
+    const [currentData, setData] = useState<RequestInfoModel[]>([])
+
+    useEffect(() => {
+      endpoint.worker.getRequests(user.Jwt!, filtration).then(result => {
+        let pagination = result.paginationDto
+        let data = result.requests
+
+        setPagination(pagination)
+        setData(data)
+      })
+    }, [])
+
     return (
         <div className={`d-flex flex-row w-100 align-self-stretch justify-content-center ${props.className}`}>
             <div className={`d-flex flex-column flex-grow-1 pe-1 me-2`}>
 
-              {maxUserRole == Roles.student && <button className={`btn btn-secondary btn-lg m-4`}>Новый запрос</button>}
+              {maxUserRole == Roles.student && <button className={`btn btn-secondary btn-lg m-4`} onClick={() => {addNewRequest()}}>Новый запрос</button>}
 
               <div className={`card-view list-view`}>
-                  {testArray.map((el, it) => {
+                  {array.map((el, it) => {
                       return (
                           <RequestInfo
                               onSelect={select}
@@ -185,7 +219,7 @@ function RequestList(props: RequestListProps){
             {selectedItem && 
               <RequestFull
               isNew={selectedItem.id == newItemId}
-                  className="flex-grow-1 card-view align-self-stretch p-2"
+                  className="flex-grow-1 align-self-stretch p-2"
                   request={selectedItem}
                   changeRequest={editRequest}
                   maxUserRole={maxUserRole}/>
@@ -197,8 +231,9 @@ function RequestList(props: RequestListProps){
 
 const PlaceHolder = () => {
   return (
-      <div className="flex-grow-1 card-view align-self-stretch p-2 jsutify-content-center align-items-center">
-          <span>Выберите запрос</span>
+      <div className="flex-grow-1 align-self-stretch p-2 d-flex flex-column justify-content-center">
+          <div className="h3 align-self-center text-secondary">Выберите запрос</div>
+          <div className="h3 align-self-center text-secondary">или создайте новый</div>
       </div>
   )
 }
