@@ -75,6 +75,7 @@ const getDateRange = (data: Data): { start: Date; end: Date } => {
 };
 
 
+
 const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
     const { start, end } = getDateRange(data);
     const allDates = getDatesInRange(start.toISOString().split("T")[0], end.toISOString().split("T")[0]);
@@ -84,15 +85,20 @@ const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
             <h1>Таблица отсутствий студентов</h1>
             <div className="d-flex">
                 {/* Фиксированная колонка с группами и студентами */}
-                <div className="flex-shrink-0 table-responsive" style={{ width: "400px" }}>
-                    <table className="table table-bordered ">
+                <div className="flex-shrink-0 table-responsive" style={{ width: "400px"}}>
+                    <table className="table table-bordered list-view"
+                        // style={{borderTopLeftRadius: "100px", borderBottomLeftRadius: "100px", border: "4px solid black",backgroundClip: "border-box" }}
+                    >
+
                         <thead>
                         <tr>
-                            <th className="sticky-top bg-white" style={{ zIndex: 2, height: "40px" }}>
+                            <td className="sticky-top bg-white "
+                                style={{zIndex: 2, height: "35px", fontSize: "0.75em", borderTopLeftRadius: "10px",}}>
                                 {/*Студент*/}
-                            </th>
+                            </td>
                         </tr>
                         </thead>
+
                         <tbody>
                         {data.groups.map((group, groupIndex) => (
                             <React.Fragment key={groupIndex}>
@@ -101,9 +107,10 @@ const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
                                         {`Группа: ${group.groupName || "Без группы"}`}
                                     </td>
                                 </tr>
+
                                 {group.students.map((student, studentIndex) => (
                                     <tr key={studentIndex}>
-                                        <td className="sticky-left bg-white" style={{zIndex: 1, height: "40px", width: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                        <td className="sticky-left bg-white " style={{zIndex: 1, height: "40px", width: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
                                             {`\u00A0 \u00A0 \u00A0${student.surname} ${student.name} ${student.patronymic}`}
                                         </td>
                                     </tr>
@@ -119,19 +126,37 @@ const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
                     <table className="table table-bordered">
                         <thead>
                         <tr>
-                            {allDates.map((date) => (
-                                <th key={date} className="sticky-top bg-white" style={{ zIndex: 2, height: "40px" }}>
-                                    {new Date(date).toLocaleDateString()}
-                                </th>
-                            ))}
+                            {allDates.map((date) => {
+                                const formattedDate = new Date(date);
+                                const dayMonth = formattedDate.toLocaleDateString('ru-RU', {
+                                    day: 'numeric',
+                                    month: 'numeric'
+                                });
+                                // const year = formattedDate.toLocaleDateString('ru-RU', {year: 'numeric'});
+
+                                return (
+                                    <td key={date} className="sticky-top bg-white "
+                                        style={{zIndex: 2, height: "35px", fontSize:"0.75em"}}>
+                                        {`${dayMonth}`}
+                                        {/*<br/>{year}*/}
+                                    </td>
+                                );
+                            })}
                         </tr>
+                        {/*<tr>*/}
+                        {/*    {allDates.map((date) => (*/}
+                        {/*        <th key={date} className="sticky-top bg-white" style={{zIndex: 2, height: "40px"}}>*/}
+                        {/*            {new Date(date).toLocaleDateString()}*/}
+                        {/*        </th>*/}
+                        {/*    ))}*/}
+                        {/*</tr>*/}
                         </thead>
                         <tbody>
                         {data.groups.map((group, groupIndex) => (
                             <React.Fragment key={groupIndex}>
                                 <tr key={groupIndex}>
                                     {allDates.map((date) => (
-                                        <td key={date} className="bg-transparent" style={{ height: "41px" }} />
+                                        <td key={date} className="bg-transparent" style={{height: "41px"}}/>
                                     ))}
                                 </tr>
 

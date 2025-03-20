@@ -75,8 +75,8 @@ class UserModel{
             console.log("orel", this.Roles);
             console.log(res.roles.map((val: string) => {return this.getRolesKeyByValue(val)}))
             this.saveInst()
-            
-        }).then(res => true)
+
+        }).then(() => true)
     }
 
     private saveInst(): void {
@@ -110,14 +110,18 @@ class UserModel{
     }
 
     private getInst() : void{
-        let token = localStorage.getItem(UserStorageItems.token)
+        const token = localStorage.getItem(UserStorageItems.token)
         if (token != null){
             this.Jwt = token
             this.Email = localStorage.getItem(UserStorageItems.email)
             this.Name =  localStorage.getItem(UserStorageItems.name)
             this.Surname =  localStorage.getItem(UserStorageItems.surname)
             this.Patronymic =  localStorage.getItem(UserStorageItems.patronymic)
-            this.Roles =  localStorage.getItem(UserStorageItems.roles)!.split(this.separator).map((val: string) => {return this.getRolesKeyByValue(val)})
+            if (localStorage.getItem(UserStorageItems.roles) != null){
+                this.Roles = localStorage.getItem(UserStorageItems.roles)!.split(this.separator).map((val: string) => {return Roles[val as keyof typeof Roles]})
+            } else {
+                this.clear()
+            }
         }
         else{
             this.clear()
