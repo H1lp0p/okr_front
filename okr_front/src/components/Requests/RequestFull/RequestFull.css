@@ -1,3 +1,7 @@
+:root{
+    --scroll-bar-color: #D9D9D9;
+}
+
 .request-full{
     user-select: none;
 }

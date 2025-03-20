@@ -39,8 +39,6 @@ function RequestList(props: RequestListProps){
     const isMainPage = props.isMainPage ? props.isMainPage : true
 
     const maxUserRole = (roles.indexOf(Roles.worker) != -1 && !isMainPage)? Roles.worker : Roles.student
-    
-    
 
     let testArray = [
         new RequestInfoModel(
@@ -186,7 +184,7 @@ function RequestList(props: RequestListProps){
     const filtration = props.filtration ? props.filtration : {} as filterInterface
 
     const [currentPage, setPage] = useState(0)
-    const [pageSize, setSize] = useState(3)
+    const [pageSize, setSize] = useState(8)
 
     const [currentData, setData] = useState<RequestInfoModel[]>([])
 
@@ -226,7 +224,7 @@ function RequestList(props: RequestListProps){
         
         //console.log("DOWN");
         
-        if (currentPage < itemsCount){
+        if (currentPage + 1 < itemsCount){
           //console.log("awailable");
           
           setPage(prew => {
@@ -371,7 +369,7 @@ function RequestList(props: RequestListProps){
 
               {maxUserRole == Roles.student && <button className={`btn btn-secondary btn-lg m-4`} onClick={() => {addNewRequest()}}>Новый запрос</button>}
 
-              <div className={`card-view list-view h-25`} onScroll={scrollHandler}>
+              <div className={`card-view list-view`} onScroll={scrollHandler}>
                   {!isLoading && 
                     <>
                       {currentData.map((el, it) => {
