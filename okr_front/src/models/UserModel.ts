@@ -28,18 +28,18 @@ class UserModel{
     login(email: string, password: string): Promise<UserModel> {
         return endpoint.user.login({email: email, password: password}).then(res => {
             this.Jwt = res.token
-        }).then(res => this.getInfo()).then(res => new UserModel())
+        }).then(() => this.getInfo()).then(() => new UserModel())
     }
     register(username: string, email: string, surname:string, patronymic: string, bithdate: string,  password: string): Promise<UserModel>{
         return endpoint.user.registration({name: username, email: email , surname: surname, patronymic: patronymic, bithdate: bithdate,  password: password}).then(res => {
             this.Jwt = res.token
-        }).then(res => this.getInfo()).then(res => new UserModel())
+        }).then(() => this.getInfo()).then(() => new UserModel())
     }
     logout(): Promise<UserModel> {
         this.clear()
         return new Promise((resolver) => {
             setTimeout(resolver, 1000)
-        }).then((res) => {
+        }).then(() => {
             return new UserModel()
         })
     }

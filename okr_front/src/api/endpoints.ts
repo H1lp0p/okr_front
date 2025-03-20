@@ -1,5 +1,3 @@
-import { jsx } from "react/jsx-runtime"
-import { Roles } from "../types/user"
 import UrlBuilder from "./urlBuilder";
 
 const endpoint = {
@@ -39,7 +37,7 @@ const endpoint = {
                     return res
                 }).catch((error) => {throw new Error(error)})
         },
-        info: (jwt: string) => {
+        info: async (jwt: string) => {
             return fetch(UrlBuilder.user.getInfo(), {
                 method: "GET",
                 headers: {
@@ -50,6 +48,17 @@ const endpoint = {
                 return res
             })
             .catch(error => {throw new Error(error)})
+        },
+        gant: async (jwt:string, data: {surname?:string, group?:string, subgroup?:string, favourite?:boolean, dateStart?:Date, dateEnd?:Date}) => {
+            return fetch(UrlBuilder.students.gant(), {
+                method:"GET",
+                headers:{
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json()).then(res => {
+                return res
+            }).catch(error => {throw new Error(error)})
         }
     }
 }

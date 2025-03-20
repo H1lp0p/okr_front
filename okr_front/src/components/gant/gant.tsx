@@ -68,33 +68,29 @@ const getDateRange = (data: Data): { start: Date; end: Date } => {
 
     if (!minDate || !maxDate) {
         const today = new Date();
-        return { start: today, end: today };
+        return {start: today, end: today};
     }
 
-    return { start: minDate, end: maxDate };
+    return {start: minDate, end: maxDate};
 };
 
 
-
-const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
-    const { start, end } = getDateRange(data);
+const GanttTable: React.FC<{ data: Data }> = ({data}) => {
+    const {start, end} = getDateRange(data);
     const allDates = getDatesInRange(start.toISOString().split("T")[0], end.toISOString().split("T")[0]);
 
     return (
         <div className="container-fluid mt-2 mb-2">
             <h1>Таблица отсутствий студентов</h1>
-            <div className="d-flex">
+            <div className="d-flex card-view ">
                 {/* Фиксированная колонка с группами и студентами */}
-                <div className="flex-shrink-0 table-responsive" style={{ width: "400px"}}>
-                    <table className="table table-bordered list-view"
-                        // style={{borderTopLeftRadius: "100px", borderBottomLeftRadius: "100px", border: "4px solid black",backgroundClip: "border-box" }}
-                    >
+                <div className="flex-shrink-0 table-responsive  table-view" style={{width: "400px"}}>
+                    <table className="table table-bordered list-view mt-2 ms-2">
 
                         <thead>
                         <tr>
                             <td className="sticky-top bg-white "
-                                style={{zIndex: 2, height: "35px", fontSize: "0.75em", borderTopLeftRadius: "10px",}}>
-                                {/*Студент*/}
+                                style={{zIndex: 2, height: "35px", fontSize: "0.75em", borderTopLeftRadius: "10px"}}>
                             </td>
                         </tr>
                         </thead>
@@ -103,15 +99,24 @@ const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
                         {data.groups.map((group, groupIndex) => (
                             <React.Fragment key={groupIndex}>
                                 <tr>
-                                    <td className="sticky-left bg-white" style={{ zIndex: 1, height: "40px" }}>
+                                    <td className="sticky-left bg-white" style={{zIndex: 1, height: "40px"}}>
                                         {`Группа: ${group.groupName || "Без группы"}`}
                                     </td>
                                 </tr>
 
                                 {group.students.map((student, studentIndex) => (
                                     <tr key={studentIndex}>
-                                        <td className="sticky-left bg-white " style={{zIndex: 1, height: "40px", width: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
-                                            {`\u00A0 \u00A0 \u00A0${student.surname} ${student.name} ${student.patronymic}`}
+                                        <td className="sticky-left bg-white " style={{
+                                            zIndex: 1,
+                                            height: "40px",
+                                            // maxWidth: "0.75vw",
+                                            // minWidth: "0.50vw",
+                                            // width: "20px",
+                                            whiteSpace: "nowrap",
+                                            // overflow: "hidden",
+                                            // textOverflow: "ellipsis"
+                                        }}>
+                                            {`\u00A0 \u00A0 ${student.surname} ${student.name} ${student.patronymic}`}
                                         </td>
                                     </tr>
                                 ))}
@@ -122,7 +127,7 @@ const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
                 </div>
 
                 {/* Прокручиваемая часть с датами */}
-                <div className="flex-grow-1 overflow-auto">
+                <div className="flex-grow-1 overflow-auto table-view mt-2 me-2">
                     <table className="table table-bordered">
                         <thead>
                         <tr>
@@ -136,27 +141,21 @@ const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
 
                                 return (
                                     <td key={date} className="sticky-top bg-white "
-                                        style={{zIndex: 2, height: "35px", fontSize:"0.75em"}}>
+                                        style={{zIndex: 2, height: "35px", fontSize: "0.75em"}}>
                                         {`${dayMonth}`}
                                         {/*<br/>{year}*/}
                                     </td>
                                 );
                             })}
                         </tr>
-                        {/*<tr>*/}
-                        {/*    {allDates.map((date) => (*/}
-                        {/*        <th key={date} className="sticky-top bg-white" style={{zIndex: 2, height: "40px"}}>*/}
-                        {/*            {new Date(date).toLocaleDateString()}*/}
-                        {/*        </th>*/}
-                        {/*    ))}*/}
-                        {/*</tr>*/}
                         </thead>
+
                         <tbody>
                         {data.groups.map((group, groupIndex) => (
                             <React.Fragment key={groupIndex}>
-                                <tr key={groupIndex}>
+                                <tr key={groupIndex} >
                                     {allDates.map((date) => (
-                                        <td key={date} className="bg-transparent" style={{height: "41px"}}/>
+                                        <td key={date} className="bg-transparent" style={{height: "41px", maxWidth: "50px !important"}}/>
                                     ))}
                                 </tr>
 
@@ -171,10 +170,10 @@ const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
                                             return (
                                                 <td
                                                     key={date}
-                                                    // className="p-2"
                                                     style={{
                                                         backgroundColor: absence ? absenceColors[absence.type] : "transparent",
-                                                        height: "41px"
+                                                        height: "41px",
+                                                        maxWidth: "50px !important"
                                                     }}
                                                     title={absence ? absence.type : ""}
                                                 />

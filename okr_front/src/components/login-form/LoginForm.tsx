@@ -3,7 +3,6 @@ import Input from '../inputs/CustomInput';
 import CustomBtn from '../buttons/CustomBtn';
 import BaseProps from '../Base/BasePropsInterface';
 import CustomForm from '../form/CustomForm';
-import UserModel from '../../models/UserModel';
 import "./LoginForm.css";
 
 
