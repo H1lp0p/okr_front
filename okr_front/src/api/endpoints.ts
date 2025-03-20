@@ -51,6 +51,17 @@ const endpoint = {
                 return res
             })
             .catch(error => {throw new Error(error)})
+        },
+        gant: (jwt:string, data: {surname?:string, group?:string, subgroup?:string, favourite?:boolean, dateStart?:Date, dateEnd?:Date}) => {
+            return fetch(UrlBuilder.students.gant(), {
+                method:"GET",
+                headers:{
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json()).then(res => {
+                return res
+            }).catch(error => {throw new Error(error)})
         }
     },
     worker: {

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import './Body.css'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from '../login-form/LoginForm';
-import Registration from '../register-form/register-form';
+import Registration from '../register-form/Register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
 import BaseProps from '../Base/BasePropsInterface'
@@ -11,6 +11,8 @@ import RequestInfoModel from '../../models/RequstModel'
 import Attachment from '../../models/Attachmet'
 import { RequestStatuses, RequestTypes } from '../../types/request'
 import RequestList from '../requestList/RequestList';
+import Filter, {filterInterface} from '../filterForm/FilterForm';
+import endpoint from '../../api/endpoints';
 
 interface BodyProps extends BaseProps{
 
@@ -19,6 +21,7 @@ interface BodyProps extends BaseProps{
 function Body() {
 
   const [user, setUser] = useState(new UserModel())
+  const [filterState, setFilterState] = useState<filterInterface>()
 
   const logout = () => {
     user.logout().then(res => {
@@ -38,6 +41,10 @@ function Body() {
       setUser(prewUser => res);
     })
   }
+
+  const gant = (formData:filterInterface) => {
+      setFilterState(formData);
+    }
 
   return (
     <>
@@ -60,8 +67,24 @@ function Body() {
           user={user}
         />
         }/>
-        <Route path="/login" element={<Login login={login}/>}/>
+        <Route path="/login" element={
+          <Login
+          login={login}/>}
+          />
         <Route path="/registration" element={<Registration registration={register}/>}/>
+        <Route path="/gant" element={<>
+          <Filter 
+            onSubmin={gant}
+          />
+        {/*
+          <Filter 
+            onSubmin={gant}
+          />
+          <SonyaComponent
+            filterState={filterState}
+          />
+        */}
+        </>}/>
       </Routes>
     </>
   )

@@ -3,7 +3,6 @@ import Input from '../inputs/CustomInput';
 import CustomBtn from '../buttons/CustomBtn';
 import BaseProps from '../Base/BasePropsInterface';
 import CustomForm from '../form/CustomForm';
-import UserModel from '../../models/UserModel';
 import "./LoginForm.css";
 
 
@@ -40,7 +39,8 @@ function Login(props: loginProps){
             className={"form-group" + ' input-group'}
             invalidFeedback={'Введите корректный адресс электронной почты: example@example.com'}
             validFeedback={''}
-            required={true}/>
+            required={true}
+            name={"email"}/>
             <Input
             placehodler={"Пароль"}
             inputType={"password"}
@@ -49,7 +49,8 @@ function Login(props: loginProps){
             className={"form-group" + ' input-group'}
             invalidFeedback={'Введите пароль'}
             validFeedback={''}
-            required={true}/>
+            required={true}
+            name={"password"}/>
             <CustomBtn
             buttonType={"submit"}
             classAttr={"btn btn-secondary btn-auth login-btn"}
