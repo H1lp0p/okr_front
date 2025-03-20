@@ -123,6 +123,8 @@ function RequestList(props: RequestListProps){
         }
     }
 
+    //there we need to compare selectedItem and newRequest.
+    //And if we need to change dates - fetch "prolonge" request, if we need to change status - fetch "setStatus" and exc.
     const editRequest = (newRequest : RequestInfoModel) => {
       setSelected(newRequest)
     }

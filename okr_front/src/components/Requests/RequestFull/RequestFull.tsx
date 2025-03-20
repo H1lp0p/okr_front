@@ -140,6 +140,8 @@ function RequestFull(props: RequestFullProps){
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
+        //There we need to call changeRequest with new data (probably need to pass each data field seperately)
+        //And in RequestList in func editRequest will be all fetches.
     }
 
     return (
