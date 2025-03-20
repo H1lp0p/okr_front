@@ -1,26 +1,74 @@
 import { data } from "react-router-dom";
 import Attachment from "../../../models/Attachmet";
 import RequestInfoModel from "../../../models/RequstModel";
-import { RequestTypes } from "../../../types/request";
+import { RequestStatuses, requestStatusText, RequestTypes } from "../../../types/request";
 import { Roles } from "../../../types/user";
 import BaseProps from "../../Base/BasePropsInterface";
 import CustomInput from "../../inputs/CustomInput";
 import { StatusChip, TypeChip } from "../chips/Chips";
 
 import './RequestFull.css'
-import { EventHandler } from "react";
+import { EventHandler, useCallback, useEffect, useState } from "react";
+import RequestInfo from "../requestInfo/RequestInfo";
+import { useDropzone } from "react-dropzone";
 
 interface RequestFullProps extends BaseProps{
-    isEditable?: boolean,
     isNew?: boolean,
-    request?: RequestInfoModel,
+    maxUserRole?: Roles.student | Roles.worker
+    request: RequestInfoModel,
     roles?: Roles[],
-    changeRequest?: (newRequest: RequestInfoModel) => {}
+    changeRequest?: (newRequest: RequestInfoModel) => void
 }
 
 function RequestFull(props: RequestFullProps){
 
-    const {isEditable, request} = props
+    const {request} = props
+
+    const isNew = props.isNew
+    
+    const copy = (request: RequestInfoModel) => {
+        return new RequestInfoModel(
+            request.id,
+            request.beginDate,
+            request.endDate,
+            request.attachments,
+            request.studentName,
+            request.groupList,
+            request.requestStatus,
+            request.requestType
+        )
+    }
+
+    const role = props.maxUserRole ? props.maxUserRole : Roles.student
+
+    //NEW VERSION OF REQUEST
+    const [newRequest, setNewRequest] = useState(request) 
+
+    const [isEdited, setEdited] = useState(false)
+
+    const [CheckStatus, setCheckStatus] = useState(request? request.isDocInCabinet : false)
+
+    const dropFileCallback = useCallback((acceptedFiles : File[]) => {
+        acceptedFiles.forEach((val, ind) => {
+            console.log(val.name);
+        })
+        //!!!NEW ATTACHMENT
+        let newAttachments = acceptedFiles.map((el) => {
+            return new Attachment(el.name, new Date(), el)
+        })
+
+        let temp = copy(newRequest)
+        temp.attachments = [...newAttachments, ...temp.attachments]
+        setNewRequest(temp)
+
+    }, [])
+
+    const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop: dropFileCallback})
+
+    useEffect(() => {
+        setNewRequest(request)
+        setEdited(false)
+    }, [request])
 
     const requestStyle = (type: RequestTypes) => {
         switch(type) {
@@ -33,88 +81,164 @@ function RequestFull(props: RequestFullProps){
         }
     }
 
-    const prolonge = () => {}
+    const typeCycle = [
+        RequestTypes.sick,
+        RequestTypes.family,
+        RequestTypes.trip
+    ]
 
-    const createNewRequest = () => {}
+    const requestClassName = requestStyle(newRequest.requestType)
 
-    const setType = () => {}
+    const setType = () => {
+        let temp = copy(newRequest)
+        temp.requestType = typeCycle[(typeCycle.indexOf(newRequest.requestType) + 1) % typeCycle.length]
 
-    const setStatus = () => {}
+        let edited = temp.requestType != request.requestType
 
-    const check = () => {}
+        setEdited(edited)
 
-    const editStartDate = () => {}
+        setNewRequest(temp)
+    }
 
-    const onChange = () => {}
+    const editDate = (start: Date, end: Date) => {
+        let temp = copy(request!)
+        
+        temp.beginDate = start
+        temp.endDate = end
+
+        let edited = temp.beginDate != request.beginDate || temp.endDate != request.endDate
+
+        setEdited(edited)
+
+        setNewRequest(temp)
+    }
+
+    const editisDocInCabinet = (event: React.ChangeEvent<HTMLInputElement>) => {
+        let temp = copy(newRequest)
+        temp.isDocInCabinet = event.target.checked
+
+        let edited = temp.isDocInCabinet != request.isDocInCabinet
+
+        setEdited(edited)
+
+        setNewRequest(temp)
+    }
+
+    const setStatus = (newStatus: RequestStatuses) => {
+        let temp = copy(newRequest)
+        temp.requestStatus = newStatus
+
+        let edited = temp.requestStatus == request.requestStatus
+
+        setEdited(edited)
+
+        setNewRequest(temp)
+    }
+
+    const dateToValue = (date: Date) => {
+        return `${date.getFullYear()}-${date.getMonth() < 10? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10? `0${date.getDate()}` : date.getDate()}`
+    }
+
+    const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        if (props.changeRequest){
+            props.changeRequest(newRequest)
+        }
+        //There we need to call changeRequest with new data (probably need to pass each data field seperately)
+        //And in RequestList in func editRequest will be all fetches.
+    }
 
     return (
-        <div className={`request-full ${props.className}`}>
-                {!request && <PlaceHolder/>}
-                {request && 
-                    <div className={`rounded h-100 w-100 ${requestStyle(request.requestType)}`}>
-                        <form>
-                            <div className="w-100 p-5 d-flex flex-row justify-content-between">
-                                <div>
-                                    <div className="h2">
-                                        {request.studentName}
-                                    </div>
-                                    <div className="h3 text-secondary">
-                                        {request.groupList.join("; ")}
-                                    </div>
-                                </div>
-                                <TypeChip
-                                    className="align-items-center align-self-center"
-                                    type={request.requestType}
-                                />
+        <form onSubmit={onSubmit} className={`d-flex flex-column`}>
+            <div className={`m-2 request-full ${props.className}`}>
+                <div className={`rounded h-100 w-100 pe-3 ${requestClassName}`} style={{overflowY: "scroll", overflowX: 'clip', maxHeight: "75vh"}}>
+                    
+                    <div className="w-100 p-5 d-flex flex-row justify-content-between">
+                        <div>
+                            <div className="h2">
+                                {request.studentName}
                             </div>
-                            <div className="input-group w-100 p-4 d-flex dlex-row">
-                                <CustomInput
-                                    inputType="date"
-                                    placehodler="дата начала"
-                                    className="flex-grow-1"
-                                    classAttr={`form-control ${requestStyle(request.requestType)}`}
-                                    onChange={editStartDate}
-                                />
-                                <CustomInput
-                                    inputType="date"
-                                    placehodler="дата начала"
-                                    className="flex-grow-1"
-                                    classAttr={`form-control ${requestStyle(request.requestType)}`}
-                                    onChange={prolonge}
-                                />
+                            <div className="h3 text-secondary">
+                                {request.groupList.join("; ")}
                             </div>
-                            <div className="form-check w-100 p-4 mx-4">
-
-                                <input type='checkbox' className="form-check-input check-big" id="check" onChange={(e) => {check()}}/>
-                                
-                                <label className="form-check-label h3" htmlFor="check">Документ в деканате</label>
-                            </div>
-
-                            <div 
-                                className={`${requestStyle(request.requestType)}-dashed h-25 d-flex rounded justify-content-center align-items-center m-2 p-4`}
-                            >
-                                <input type="file" id="file_input" style={{display: "none"}}></input>
-                                Добавить файл
-                            </div>
-                            <div style={{overflowY: 'scroll'}}>
-                                {request.attachments.map((el, it) => {
-                                    return <AttachmentInfo className={requestStyle(request.requestType)} attachment={el} key={`${request.id}_attachment_${it}`}/>
-                                })}
-                            </div>
-                        </form>
+                        </div>
+                        <TypeChip
+                            className="align-items-center align-self-center"
+                            type={newRequest.requestType}
+                            onClick={role == Roles.worker || isNew ? () => {setType()} : undefined}
+                        />
                     </div>
-                }
+
+                    <div className="input-group w-100 p-4 d-flex dlex-row">
+                            
+                            <span className={`input-group-text ${role != Roles.worker ? 'disabled' : '' } ${requestClassName}`}>Начало</span>
+                            <input
+                                id={`edit-request-startDate`}
+                                name={'startDate'}
+                                onChange={(e) => {
+                                    editDate(new Date(e.target.value), newRequest.endDate)
+                                }}
+                                defaultValue={dateToValue(newRequest.beginDate)}
+                                className={`form-control ${requestClassName}`}
+                                type="date"
+                            />
+                            <span className={`input-group-text ${requestClassName}`}>Конец</span>
+                            <input
+                                id={`edit-request-endtDate`}
+                                onChange={(e) => {
+                                    editDate(newRequest.beginDate, new Date(e.target.value))
+                                }}
+                                defaultValue={dateToValue(newRequest.endDate)}
+                                className={`form-control ${requestClassName}`}
+                                type="date"
+                            />
+                        </div>
+                    
+                    <div className="form-check w-100 p-4 mx-4">
+
+                        <input type='checkbox' checked={newRequest.isDocInCabinet} onChange={editisDocInCabinet} className={`form-check-input check-${requestClassName}`} id="check"/>
+                        <label className="form-check-label" htmlFor="check">Документ в деканате</label>
+                    </div>
+
+                    <div className={`w-100 px-5 my-3 d-flex justify-content-between ${role != Roles.worker ? "d-none" : ''}`}>
+                        <input id="radio-check-status-1" type="radio" name="request_radio_status" className={`btn-check`} onChange={() => {setStatus(RequestStatuses.denied)}}></input>
+                        <label htmlFor="radio-check-status-1" className={`btn btn-radio-${requestClassName}`}>{requestStatusText(RequestStatuses.denied)}</label>
+
+                        <input id="radio-check-status-2" type="radio" name="request_radio_status" className={`btn-check`} onChange={() => {setStatus(RequestStatuses.inQueue)}}></input>
+                        <label htmlFor="radio-check-status-2" className={`btn btn-radio-${requestClassName}`}>{requestStatusText(RequestStatuses.inQueue)}</label>
+
+                        <input id="radio-check-status-3" type="radio" name="request_radio_status" className={`btn-check`} onChange={() => {setStatus(RequestStatuses.approved)}}></input>
+                        <label htmlFor="radio-check-status-3" className={`btn btn-radio-${requestClassName}`}>{requestStatusText(RequestStatuses.approved)}</label>    
+                    </div>
+
+                    <div {...getRootProps()} className={`${role != Roles.student ? "d-none" : ""} ${requestClassName}${!isDragActive ? "-dashed" : ""} d-flex rounded justify-content-center align-items-center m-2 p-4`}>
+                        Добавить файл
+                        <input {...getInputProps()} defaultValue={[]}/>
+                    </div>
+
+                    <div>
+                    {newRequest.attachments.map((el, it) => {
+                            return <AttachmentInfo className={requestClassName} isNew={true} attachment={el} key={`new_${request.id}_attachment_${it}`}/>
+                        })}
+                    </div>
+                    
+                </div>
             </div>
+
+            <button type="submit" className={`m-2 btn ${!isEdited ? "disabled" : ""}`}>Сохранить</button>
+        </form>
     )
 }
 
 interface AttachmentProps extends BaseProps{
     attachment: Attachment,
+    isNew? : boolean
 }
 
 function AttachmentInfo (props: AttachmentProps){
 
     const {date, file, fileName} = props.attachment
+    const isNew = props.isNew ? props.isNew : false
 
     const toStr = (date: Date) => {
         return `${date.getDate() < 10 ? "0" + date.getDate(): date.getDate()}.${date.getMonth() < 10 ? "0"+date.getMonth() : date.getMonth()}.${date.getFullYear()}`
@@ -127,23 +251,17 @@ function AttachmentInfo (props: AttachmentProps){
             border: '2px solid gray'
          }}>
             
-        <span>{fileName}</span>
-        <div className="d-flex flex-column justify-content-center align-items-center">
-            {date && 
-                <>
-                    <span>добавлен</span>
-                    <div className={`chip-${props.className} rounded`}>{toStr(date)}</div>
-                </>
-            }
-        </div>
-        </div>
-    )
-}
-
-const PlaceHolder = () => {
-    return (
-        <div className="h-100 w-100 d-flex justify-content-center align-items-center">
-            {"Выберите запрос"}
+            <span>{fileName}</span>
+            <div className="d-flex flex-row justify-content-center">
+                <div className="d-flex flex-column justify-content-center align-items-center">
+                    {date && 
+                        <>
+                            <span>добавлен</span>
+                            <div className={`chip-${props.className} rounded`}>{toStr(date)}</div>
+                        </>
+                    }
+                </div>
+            </div>
         </div>
     )
 }

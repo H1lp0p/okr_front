@@ -7,6 +7,8 @@ class RequestInfoModel{
     endDate: Date
     attachments: Attachment[]
 
+    isDocInCabinet: boolean = false
+
     requestStatus: RequestStatuses
     requestType: RequestTypes
 

@@ -29,32 +29,45 @@ function Registration(props: registerProps){
             <Input
             placehodler={"Адрес электронной почты"}
             inputType={"email"}
-            className={'input-group'}
-            classAttr={"form-control auth-input"}
-            onChange={(e) => setEmail(e.target.value)}/>
+            classAttr={" auth-input"}
+            onChange={(e) => setEmail(e.target.value)}
+            className={"form-group" +' input-group'}
+            invalidFeedback={'Введите корректный адресс электронной почты: example@example.com'}
+            validFeedback={''}
+            required={true}/>
             <Input
             placehodler={"Фамилия имя отчество"}
             inputType={"text"}
-            className={'input-group'}
-            classAttr={"form-control auth-input"}
-            onChange={(e) => setName(e.target.value)}/>
+            classAttr={" auth-input"}
+            onChange={(e) => setName(e.target.value)}
+            className={"form-group" +' input-group'}
+            invalidFeedback={'Введите Фамилию, имя и отчество корректно: Иванов Иван Иванович'}
+            validFeedback={''}
+            required={true}/>
             <Input
             placehodler={"Дата рождения"}
             inputType={"Date"}
-            className={'input-group'}
-            classAttr={"form-control auth-input"}
-            onChange={(e) => setDate(e.target.value)}/>
+            classAttr={" auth-input"}
+            onChange={(e) => setDate(e.target.value)}
+            className={"form-group" + ' input-group'}
+            invalidFeedback={'Введите дату рождения!'}
+            validFeedback={''}
+            required={true}/>
             <Input
             placehodler={"Пароль"}
             inputType={"password"}
-            className={'input-group'}
-            classAttr={"form-control auth-input"}
-            onChange={(e) => setPassword(e.target.value)}/>
+            classAttr={" auth-input"}
+            onChange={(e) => setPassword(e.target.value)}
+            className={"form-group" + ' input-group'}
+            invalidFeedback={'Введите пароль'}
+            validFeedback={''}
+            required={true}/>
             <CustomBtn
             buttonType={"submit"}
             classAttr={"btn btn-secondary btn-auth registr-btn"}
             value={"Зарегистрироваться"}
-            className={"registr-btn-cont"}/>
+            className={"registr-btn-cont"}
+            />
         </CustomForm>
     );
 }
