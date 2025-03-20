@@ -44,14 +44,38 @@ class UserModel{
         })
     }
 
+    private getRolesKeyByValue(value: string): Roles {
+        switch(value){
+            case Roles.student.toString(): {
+                return Roles.student
+            }
+            case Roles.worker.toString(): {
+                return Roles.worker
+            }
+            case Roles.admin.toString(): {
+                return Roles.admin
+            }
+            case Roles.teacher.toString(): {
+                return Roles.teacher
+            }
+            default: {
+                return Roles.user
+            }
+        }
+      }
+
     private getInfo(): Promise<boolean> {
         return endpoint.user.info(this.Jwt!).then(res => {
             this.Email = res.email
             this.Name = res.name
             this.Surname = res.surname
             this.Patronymic = res.patronymic
-            this.Roles = res.roles
+            console.log(res.roles);
+            this.Roles = res.roles.map((val: string) => {return this.getRolesKeyByValue(val)})
+            console.log("orel", this.Roles);
+            console.log(res.roles.map((val: string) => {return this.getRolesKeyByValue(val)}))
             this.saveInst()
+            
         }).then(res => true)
     }
 
@@ -93,7 +117,7 @@ class UserModel{
             this.Name =  localStorage.getItem(UserStorageItems.name)
             this.Surname =  localStorage.getItem(UserStorageItems.surname)
             this.Patronymic =  localStorage.getItem(UserStorageItems.patronymic)
-            this.Roles =  localStorage.getItem(UserStorageItems.roles)!.split(this.separator).map((val: String) => {return Roles[val as keyof typeof Roles]})
+            this.Roles =  localStorage.getItem(UserStorageItems.roles)!.split(this.separator).map((val: string) => {return this.getRolesKeyByValue(val)})
         }
         else{
             this.clear()

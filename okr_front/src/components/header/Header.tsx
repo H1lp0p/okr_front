@@ -14,8 +14,6 @@ interface HeaderProps extends BaseProps {
 function Header(props: HeaderProps) {
 
     const userState = props.user
-
-    console.log(userState);
     
 
     const navTabs = (userState: UserModel) => {
@@ -23,11 +21,11 @@ function Header(props: HeaderProps) {
         <ul className="navbar-nav">
             {userState.Roles.findIndex((val: Roles) => val == Roles.teacher) != -1 &&
             <li className="nav-intem">
-                <a className="nav-link text-light">Все пропуски</a>
+                <Link className="nav-link text-light" to={"/"}>Все пропуски</Link>
             </li>}
             {userState.Roles.findIndex((val: Roles) => val == Roles.worker) != -1 &&
             <li className="nav-intem">
-                <a className="nav-link text-light">работнику деканата</a>
+                <Link className="nav-link text-light" to={"/worker"}>работнику деканата</Link>
             </li>}
         </ul>)
     }
