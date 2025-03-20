@@ -159,7 +159,7 @@ function RequestList(props: RequestListProps){
           new Date(),
           [],
           `${user.Name} ${user.Surname}`,
-          ["TODO: data from back"],
+          [user.GroupName == null? user.GroupName! : "нет"],
           RequestStatuses.inQueue,
           RequestTypes.sick
         )
@@ -266,7 +266,7 @@ function RequestList(props: RequestListProps){
             new Date(el.startDate),
             new Date(el.endDate),
             atts,
-            el.creator.name,
+            `${el.creator.name} ${el.creator.surname}`,
             [el.creator.groupName],
             toStatus(el.status),
             toType(el.type)
@@ -308,7 +308,7 @@ function RequestList(props: RequestListProps){
             new Date(el.startDate),
             new Date(el.endDate),
             atts,
-            el.creator.name,
+            `${el.creator.name} ${el.creator.surname}`,
             [el.creator.groupName],
             toStatus(el.status),
             toType(el.type)

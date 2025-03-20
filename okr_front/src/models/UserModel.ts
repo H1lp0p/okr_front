@@ -8,7 +8,8 @@ enum UserStorageItems{
     name = "name",
     surname = "surname",
     patronymic = "patronymic",
-    roles = "roles"
+    roles = "roles",
+    group = "group"
 }
 
 class UserModel{
@@ -18,6 +19,7 @@ class UserModel{
     Patronymic?: string | null | undefined
     Email?: string | null | undefined
     Roles : Roles[] = []
+    GroupName?: string | null | undefined
 
     private separator: string = "; "
 
@@ -70,6 +72,7 @@ class UserModel{
             this.Name = res.name
             this.Surname = res.surname
             this.Patronymic = res.patronymic
+            this.GroupName = res.groupName
             console.log(res.roles);
             this.Roles = res.roles.map((val: string) => {return this.getRolesKeyByValue(val)})
             console.log("orel", this.Roles);
@@ -86,7 +89,9 @@ class UserModel{
             localStorage.setItem(UserStorageItems.surname, this.Surname!)
             localStorage.setItem(UserStorageItems.patronymic, this.Patronymic!)
             localStorage.setItem(UserStorageItems.email, this.Email!)
+            localStorage.setItem(UserStorageItems.group, this.GroupName!)
             localStorage.setItem(UserStorageItems.roles, this.Roles!.join(this.separator))
+
         }
         else{
             this.clear()
@@ -107,6 +112,7 @@ class UserModel{
         localStorage.removeItem(UserStorageItems.surname)
         localStorage.removeItem(UserStorageItems.patronymic)
         localStorage.removeItem(UserStorageItems.roles)
+        localStorage.removeItem(UserStorageItems.group)
     }
 
     private getInst() : void{
@@ -117,6 +123,7 @@ class UserModel{
             this.Name =  localStorage.getItem(UserStorageItems.name)
             this.Surname =  localStorage.getItem(UserStorageItems.surname)
             this.Patronymic =  localStorage.getItem(UserStorageItems.patronymic)
+            this.GroupName =  localStorage.getItem(UserStorageItems.group)
             this.Roles =  localStorage.getItem(UserStorageItems.roles)!.split(this.separator).map((val: string) => {return this.getRolesKeyByValue(val)})
         }
         else{

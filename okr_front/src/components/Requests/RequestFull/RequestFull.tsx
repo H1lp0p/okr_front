@@ -226,7 +226,7 @@ function RequestFull(props: RequestFullProps){
                 </div>
             </div>
 
-            <button type="submit" className={`m-2 btn ${!isEdited ? "disabled" : ""}`}>Сохранить</button>
+            <button type="submit" className={`m-2 btn btn-lg align-self-bottom ${!isEdited ? "disabled" : ""}`}>Сохранить</button>
         </form>
     )
 }
