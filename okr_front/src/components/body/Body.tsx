@@ -48,9 +48,18 @@ function Body() {
         <Route path="/" element={<>
           <RequestList
             className=''
+            isMainPage={true}
+            userRoles={user.Roles}
           />
 
         </>}/>
+        <Route path='/worker' element={
+          <RequestList
+          className=''
+          isMainPage={false}
+          userRoles={user.Roles}
+        />
+        }/>
         <Route path="/login" element={<Login login={login}/>}/>
         <Route path="/registration" element={<Registration registration={register}/>}/>
       </Routes>

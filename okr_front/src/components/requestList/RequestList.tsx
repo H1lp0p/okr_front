@@ -12,12 +12,24 @@ import { Roles } from "../../types/user";
 
 
 interface RequestListProps extends BaseProps{
-  userRoles? : Roles[]
+  userRoles? : Roles[],
+  isMainPage?: boolean
 }
 
 function RequestList(props: RequestListProps){
 
+    const newItemId = "-1"
+
     const [selectedItem, setSelected] = useState<RequestInfoModel>()
+
+    const roles = props.userRoles ? props.userRoles : []
+    
+    const isMaindPage = props.isMainPage ? props.isMainPage : true
+
+    const maxUserRole = (roles.indexOf(Roles.worker) != -1 && !isMaindPage)? Roles.worker : Roles.student
+    
+    console.log(maxUserRole);
+    
 
     let testArray = [
         new RequestInfoModel(
@@ -117,7 +129,7 @@ function RequestList(props: RequestListProps){
     const select = (newSelected: RequestInfoModel) => {
         if (selectedItem && newSelected.id == selectedItem.id){
             setSelected(new RequestInfoModel(
-              "-1",
+              newItemId,
               new Date(),
               new Date(),
               [],
@@ -146,28 +158,32 @@ function RequestList(props: RequestListProps){
     
     return (
         <div className={`d-flex flex-row w-100 align-self-stretch justify-content-center ${props.className}`}>
-            <div className={`d-flex flex-column flex-grow-1 pe-1 me-2 card-view list-view`}>
-                {testArray.map((el, it) => {
-                    return (
-                        <RequestInfo
-                            onSelect={select}
-                            selectedId={selectedItem? selectedItem.id : ""}
-                            request={el}
-                            key={`${el.id}_${it}`}
-                        />
-                    )
-                })}
+            <div className={`d-flex flex-column flex-grow-1 pe-1 me-2`}>
+
+              {maxUserRole == Roles.student && <button className={`btn btn-secondary btn-lg m-4`}>Новый запрос</button>}
+
+              <div className={`card-view list-view`}>
+                  {testArray.map((el, it) => {
+                      return (
+                          <RequestInfo
+                              onSelect={select}
+                              selectedId={selectedItem? selectedItem.id : ""}
+                              request={el}
+                              key={`${el.id}_${it}`}
+                          />
+                      )
+                  })}
+              </div>
             </div>
-
-
+            
             {/* Need to get user Roles, so transfer it throu Body (edit props of this component) */}
             {selectedItem && 
               <RequestFull
-              isNew={false}
+              isNew={selectedItem.id == newItemId}
                   className="flex-grow-1 card-view align-self-stretch p-2"
                   request={selectedItem}
                   changeRequest={editRequest}
-                  maxUserRole={Roles.worker}/>
+                  maxUserRole={maxUserRole}/>
             }
             {!selectedItem && <PlaceHolder/>}
         </div>
