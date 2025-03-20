@@ -21,7 +21,7 @@ function Header(props: HeaderProps) {
         <ul className="navbar-nav">
             {userState.Roles.findIndex((val: Roles) => val == Roles.teacher) != -1 &&
             <li className="nav-intem">
-                <Link className="nav-link text-light" to={"/"}>Все пропуски</Link>
+                <Link className="nav-link text-light" to={"/gant"}>Все пропуски</Link>
             </li>}
             {userState.Roles.findIndex((val: Roles) => val == Roles.worker) != -1 &&
             <li className="nav-intem">

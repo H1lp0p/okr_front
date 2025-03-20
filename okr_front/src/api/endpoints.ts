@@ -1,6 +1,7 @@
 import { jsx } from "react/jsx-runtime"
 import { Roles } from "../types/user"
 import UrlBuilder from "./urlBuilder";
+import FiltrationInterface from "../types/filtraton";
 
 const endpoint = {
     user: {
@@ -50,6 +51,30 @@ const endpoint = {
                 return res
             })
             .catch(error => {throw new Error(error)})
+        },
+        gant: (jwt:string, data: {surname?:string, group?:string, subgroup?:string, favourite?:boolean, dateStart?:Date, dateEnd?:Date}) => {
+            return fetch(UrlBuilder.students.gant(), {
+                method:"GET",
+                headers:{
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json()).then(res => {
+                return res
+            }).catch(error => {throw new Error(error)})
+        }
+    },
+    worker: {
+        getRequests: (jwt: string, filtration: FiltrationInterface, pagination: {page: number, pageSize: number}) => {
+            let query = new URLSearchParams({...filtration, pageIndex: pagination.page.toString(), pageSize: pagination.pageSize.toString()})
+            return fetch(`${UrlBuilder.requests.getAll()}?${query.toString()}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${jwt}`
+                }
+            }).then(response => {
+                return response.json()
+            }).catch(error => {throw new Error(error)})
         }
     }
 }

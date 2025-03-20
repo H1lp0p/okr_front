@@ -34,7 +34,8 @@ function Registration(props: registerProps){
             className={"form-group" +' input-group'}
             invalidFeedback={'Введите корректный адресс электронной почты: example@example.com'}
             validFeedback={''}
-            required={true}/>
+            required={true}
+            name={"email"}/>
             <Input
             placehodler={"Фамилия имя отчество"}
             inputType={"text"}
@@ -43,7 +44,8 @@ function Registration(props: registerProps){
             className={"form-group" +' input-group'}
             invalidFeedback={'Введите Фамилию, имя и отчество корректно: Иванов Иван Иванович'}
             validFeedback={''}
-            required={true}/>
+            required={true}
+            name={"Fio"}/>
             <Input
             placehodler={"Дата рождения"}
             inputType={"Date"}
@@ -52,7 +54,8 @@ function Registration(props: registerProps){
             className={"form-group" + ' input-group'}
             invalidFeedback={'Введите дату рождения!'}
             validFeedback={''}
-            required={true}/>
+            required={true}
+            name={"Bithdate"}/>
             <Input
             placehodler={"Пароль"}
             inputType={"password"}
@@ -61,7 +64,8 @@ function Registration(props: registerProps){
             className={"form-group" + ' input-group'}
             invalidFeedback={'Введите пароль'}
             validFeedback={''}
-            required={true}/>
+            required={true}
+            name={"password"}/>
             <CustomBtn
             buttonType={"submit"}
             classAttr={"btn btn-secondary btn-auth registr-btn"}
