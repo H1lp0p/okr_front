@@ -2,14 +2,15 @@ import { useState } from 'react'
 import './Body.css'
 import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from '../login-form/LoginForm';
-import Registration from '../register-form/Register-form';
+import Registration from '../register-form/register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
 import BaseProps from '../Base/BasePropsInterface'
-import RequestInfo from '../requestInfo/RequestInfo'
+import RequestInfo from '../Requests/requestInfo/RequestInfo'
 import RequestInfoModel from '../../models/RequstModel'
 import Attachment from '../../models/Attachmet'
 import { RequestStatuses, RequestTypes } from '../../types/request'
+import RequestList from '../requestList/RequestList';
 
 interface BodyProps extends BaseProps{
 
@@ -38,17 +39,6 @@ function Body() {
     })
   }
 
-  let testRequest = new RequestInfoModel(
-    "id",
-    new Date(),
-    new Date(),
-    [new Attachment()],
-    "Вася Полушкин",
-    ["972303"],
-    RequestStatuses.inQueue,
-    RequestTypes.sick
-  )
-
   return (
     <>
       <Header
@@ -56,10 +46,10 @@ function Body() {
         logout={logout}/>
       <Routes>
         <Route path="/" element={<>
-          <span>Мы делаем фронт, честно</span><br/>
-          <button
-          className='btn btn-primary' 
-          onClick={(event) => {login("a", "b")}}>Тестовый login</button>
+          <RequestList
+            className=''
+          />
+
         </>}/>
         <Route path="/login" element={<Login login={login}/>}/>
         <Route path="/registration" element={<Registration registration={register}/>}/>

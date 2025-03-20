@@ -1,0 +1,48 @@
+:root{
+    --chip-radius: 1em;
+    --base-border-width: 2px;
+}
+
+.request-info{
+    user-select: none;
+}
+
+.type-sick{
+    border: var(--base-border-width) solid var(--color-sick) !important;
+}
+
+.type-family{
+    border: var(--base-border-width) solid var(--color-family) !important;
+}
+
+.type-trip{
+    border: var(--base-border-width) solid var(--color-trip) !important;
+}
+
+.type-sick-dashed{
+    border: var(--base-border-width) dashed var(--color-sick) !important;
+}
+
+.type-family-dashed{
+    border: var(--base-border-width) dashed var(--color-family) !important;
+}
+
+.type-trip-dashed{
+    border: var(--base-border-width) dashed var(--color-trip) !important;
+}
+
+.type-sick-filled{
+    border: var(--base-border-width) solid var(--color-sick);
+    background-color: var(--color-sick);
+}
+
+.type-family-filled{
+    border: var(--base-border-width) solid var(--color-family);
+    background-color: var(--color-family);
+}
+
+
+.type-trip-filled{
+    border: var(--base-border-width) solid var(--color-trip);
+    background-color: var(--color-trip);
+}
