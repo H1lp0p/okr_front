@@ -31,7 +31,7 @@ class UserModel{
         }).then(res => this.getInfo()).then(res => new UserModel())
     }
     register(username: string, email: string, surname:string, patronymic: string, bithdate: string,  password: string): Promise<UserModel>{
-        return endpoint.user.registration({username: username, email: email , surname: surname, patronymic: patronymic, bithdate: bithdate,  password: password}).then(res => {
+        return endpoint.user.registration({name: username, email: email , surname: surname, patronymic: patronymic, bithdate: bithdate,  password: password}).then(res => {
             this.Jwt = res.token
         }).then(res => this.getInfo()).then(res => new UserModel())
     }
@@ -50,7 +50,7 @@ class UserModel{
             this.Name = res.name
             this.Surname = res.surname
             this.Patronymic = res.patronymic
-            this.Roles = res.role
+            this.Roles = res.roles
             this.saveInst()
         }).then(res => true)
     }
