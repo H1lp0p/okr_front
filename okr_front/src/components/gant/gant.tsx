@@ -1,0 +1,170 @@
+import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
+import "./gant.css"
+
+type Request = {
+    startDate: string;
+    endDate: string;
+    type: string;
+};
+
+type Student = {
+    surname: string;
+    name: string;
+    patronymic: string;
+    requests: Request[];
+};
+
+type Group = {
+    groupName: string | null;
+    students: Student[];
+};
+
+type Data = {
+    groups: Group[];
+};
+
+// Цвета для типов отсутствий
+const absenceColors: Record<string, string> = {
+    FAMILY: "#FCA130",
+    SICK: "#55D468",
+    EVENT_TRIP: "#5BDEDE"
+};
+
+// Функция для получения всех дат в диапазоне
+const getDatesInRange = (startDate: string, endDate: string): string[] => {
+    const dates: string[] = [];
+    const currentDate = new Date(startDate);
+    const end = new Date(endDate);
+
+    while (currentDate <= end) {
+        dates.push(currentDate.toISOString().split("T")[0]);
+        currentDate.setDate(currentDate.getDate() + 1);
+    }
+
+    return dates;
+};
+
+// Функция для получения минимальной и максимальной даты
+const getDateRange = (data: Data): { start: Date; end: Date } => {
+    let minDate: Date | null = null;
+    let maxDate: Date | null = null;
+
+    data.groups.forEach((group) => {
+        group.students.forEach((student) => {
+            student.requests.forEach((request) => {
+                const startDate = new Date(request.startDate);
+                const endDate = new Date(request.endDate);
+
+                if (!minDate || startDate < minDate) {
+                    minDate = startDate;
+                }
+                if (!maxDate || endDate > maxDate) {
+                    maxDate = endDate;
+                }
+            });
+        });
+    });
+
+    if (!minDate || !maxDate) {
+        const today = new Date();
+        return { start: today, end: today };
+    }
+
+    return { start: minDate, end: maxDate };
+};
+
+
+const GanttTable: React.FC<{ data: Data }> = ({ data }) => {
+    const { start, end } = getDateRange(data);
+    const allDates = getDatesInRange(start.toISOString().split("T")[0], end.toISOString().split("T")[0]);
+
+    return (
+        <div className="container-fluid mt-2 mb-2">
+            <h1>Таблица отсутствий студентов</h1>
+            <div className="d-flex">
+                {/* Фиксированная колонка с группами и студентами */}
+                <div className="flex-shrink-0 table-responsive" style={{ width: "400px" }}>
+                    <table className="table table-bordered ">
+                        <thead>
+                        <tr>
+                            <th className="sticky-top bg-white" style={{ zIndex: 2, height: "40px" }}>
+                                {/*Студент*/}
+                            </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {data.groups.map((group, groupIndex) => (
+                            <React.Fragment key={groupIndex}>
+                                <tr>
+                                    <td className="sticky-left bg-white" style={{ zIndex: 1, height: "40px" }}>
+                                        {`Группа: ${group.groupName || "Без группы"}`}
+                                    </td>
+                                </tr>
+                                {group.students.map((student, studentIndex) => (
+                                    <tr key={studentIndex}>
+                                        <td className="sticky-left bg-white" style={{zIndex: 1, height: "40px", width: "200px", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis" }}>
+                                            {`\u00A0 \u00A0 \u00A0${student.surname} ${student.name} ${student.patronymic}`}
+                                        </td>
+                                    </tr>
+                                ))}
+                            </React.Fragment>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+
+                {/* Прокручиваемая часть с датами */}
+                <div className="flex-grow-1 overflow-auto">
+                    <table className="table table-bordered">
+                        <thead>
+                        <tr>
+                            {allDates.map((date) => (
+                                <th key={date} className="sticky-top bg-white" style={{ zIndex: 2, height: "40px" }}>
+                                    {new Date(date).toLocaleDateString()}
+                                </th>
+                            ))}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {data.groups.map((group, groupIndex) => (
+                            <React.Fragment key={groupIndex}>
+                                <tr key={groupIndex}>
+                                    {allDates.map((date) => (
+                                        <td key={date} className="bg-transparent" style={{ height: "41px" }} />
+                                    ))}
+                                </tr>
+
+                                {group.students.map((student, studentIndex) => (
+                                    <tr key={studentIndex}>
+                                        {allDates.map((date) => {
+                                            const absence = student.requests.find((request) => {
+                                                const dates = getDatesInRange(request.startDate, request.endDate);
+                                                return dates.includes(date);
+                                            });
+
+                                            return (
+                                                <td
+                                                    key={date}
+                                                    // className="p-2"
+                                                    style={{
+                                                        backgroundColor: absence ? absenceColors[absence.type] : "transparent",
+                                                        height: "41px"
+                                                    }}
+                                                    title={absence ? absence.type : ""}
+                                                />
+                                            );
+                                        })}
+                                    </tr>
+                                ))}
+                            </React.Fragment>
+                        ))}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    );
+};
+
+export default GanttTable;
