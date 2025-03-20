@@ -6,7 +6,7 @@ const baseUrl = "http://90.188.93.70:39965/";
 const endpoint = {
     user: {
         login: async (data : {email: string, password: string}) => {
-            try {const response = await fetch (baseUrl + 'User/loginUser',{
+            try {const response = await fetch (baseUrl + 'account/login',{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',
@@ -24,8 +24,8 @@ const endpoint = {
                     console.error(error);
                 };
         },
-        registration: async (data : {email: string, name:string, bithdate: string,  password: string}) => {
-            try {const response = await fetch (baseUrl + 'User/registerUser',{
+        registration: async (data : {username: string, email: string, surname:string, patronymic: string, bithdate: string,  password: string}) => {
+            try {const response = await fetch (baseUrl + 'account/register',{
                 method: "POST",
                 headers: {
                     'Content-Type': 'application/json',

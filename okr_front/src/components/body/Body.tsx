@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './Body.css'
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route, Link, useNavigate } from 'react-router-dom';
 import Login from '../login-form/LoginForm';
 import Registration from '../register-form/Register-form';
 import UserModel from '../../models/UserModel'
@@ -28,12 +28,14 @@ function Body() {
   const login = (email: string, password: string) => {
     user.login(email, password).then(res => {
       console.log("SET", res);
-      
-        setUser(prewUser => res)
+        setUser(prewUser => res);
     })
   }
   const register = (email: string, name:string, bithdate: string,  password: string) => {
-    UserModel
+    user.register(name.split(" ")[1], email, name.split(" ")[0], name.split(" ")[2], bithdate, password).then(res => {
+      console.log("SET", res);
+      setUser(prewUser => res);
+    })
   }
 
   let testRequest = new RequestInfoModel(
