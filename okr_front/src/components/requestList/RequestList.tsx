@@ -391,8 +391,8 @@ function RequestList(props: RequestListProps){
             group: filtration.group,
             subgroup: filtration.subgroup,
             favourite: filtration.favourite,
-            datestart: filtration.datestart?.toisostring().slice(0, 10),
-            dateend: filtration.dateend?.toisostring().slice(0, 10)
+            dateStart: filtration.dateStart?.toISOString().slice(0, 10),
+            dateEnd: filtration.dateEnd?.toISOString().slice(0, 10)
         }, {page: currentPage, pageSize: pageSize}).then(result => {
           let pagination = result.paginationDto
           
@@ -481,8 +481,8 @@ function RequestList(props: RequestListProps){
             group: filtration.group,
             subgroup: filtration.subgroup,
             favourite: filtration.favourite,
-            datestart: filtration.datestart?.toisostring().slice(0, 10),
-            dateend: filtration.dateend?.toisostring().slice(0, 10)
+            dateStart: filtration.dateStart?.toISOString().slice(0, 10),
+            dateEnd: filtration.dateEnd?.toISOString().slice(0, 10)
         }, {page: currentPage, pageSize: pageSize}).then(result => {
         let pagination = result.paginationDto
         

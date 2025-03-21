@@ -101,8 +101,7 @@ const endpoint = {
                 method:"GET",
                 headers:{
                     'Authorization': `Bearer ${jwt}`
-                },
-                body: JSON.stringify(data)
+                }
             }).then(response => response.blob()).then(res => {//Что делать с response? Должен же быть CSV?
                 return res
             }).catch(error => {throw new Error(error)})
@@ -145,7 +144,21 @@ const endpoint = {
                     return true;
                 }
             })
+        },
+        addGroup: (jwt:string, name:string) => {
+            return fetch(UrlBuilder.tools.addGroup(name), {
+                method:"POST",
+                headers:{
+                    "Authorization": `Bearer ${jwt}`
+                },
+                body: JSON.stringify({name})
+            }).then(response => {
+                if (response.ok){
+                    return true;
+                }
+            })
         }
+    },
     worker: {
         getRequests: (jwt: string, filtration: {
             surname?: string,
@@ -293,5 +306,4 @@ const endpoint = {
         },
     }
 }
-
-export default endpoint
+export default endpoint;
