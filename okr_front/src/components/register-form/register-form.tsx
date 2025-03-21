@@ -15,7 +15,14 @@ function Registration(props: registerProps){
     const [date, setDate] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [isValidated, setValidated] = useState(false);
     const handleSubmin = (event: React.FormEvent<HTMLFormElement>) =>{
+            console.log(name.split(" "))
+            if (name.split(" ").length < 3){
+                setValidated(true);
+                event.stopPropagation();
+                return
+            }
             event.preventDefault();
             try{
                 props.registration(email, name, date, password);
@@ -24,7 +31,7 @@ function Registration(props: registerProps){
             }
         };
     return (
-        <CustomForm id="register-form" className='register-cont container-sm border-right border-bottom custom-rounded custom-shadow d-block p-5' divClass='container d-flex justify-content-center align-items-center vh-100'
+        <CustomForm id="register-form" className={`register-cont container-sm border-right border-bottom custom-rounded custom-shadow d-block p-5 ${isValidated? "was-validated": "needs-validation"}`} divClass='container d-flex justify-content-center align-items-center vh-100'
         onSubmin={handleSubmin} error={error}>
             <Input
             placehodler={"Адрес электронной почты"}

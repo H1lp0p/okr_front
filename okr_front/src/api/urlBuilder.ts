@@ -17,15 +17,16 @@ const UrlBuilder = {
     },
     tools:{
         addTeacher: (id:string) => `${UrlBuilder.baseUrl}/tools/teacher/${id}/add`,
-        addSubgroup: () => `${UrlBuilder.baseUrl}/tools/subgroup/add`,
+        addSubgroup: (subGroupName:string, groupName:string) => `${UrlBuilder.baseUrl}/tools/subgroup/${subGroupName}/add/to/group/${groupName}`,
         addStudentToSubgroup: () => `${UrlBuilder.baseUrl}/tools/student/add/subgroup`,
         addStunentToGroup: () => `${UrlBuilder.baseUrl}/tools/add/group`,
-        addGroup: () => `${UrlBuilder.baseUrl}/tools/group/add`,
+        addGroup: (group:string) => `${UrlBuilder.baseUrl}/tools/group/${group}/add`,
         deleteTeacher: (teacherId: string) => `${UrlBuilder.baseUrl}/tools/teacher/${teacherId}/delete`,
         deleteSubgroup: (subgroupId: string) => `${UrlBuilder.baseUrl}/tools/subgroup/${subgroupId}/delete`,
         deleteSubgoupStudent: () => `${UrlBuilder.baseUrl}/tools/student/delete/subgroup`,
         deleteGroupStudent: () => `${UrlBuilder.baseUrl}/tools/student/delete/group`,
-        deleteGroup: (groupName: string) => `${UrlBuilder.baseUrl}/tools/group?${groupName}/delete`
+        deleteGroup: (groupName: string) => `${UrlBuilder.baseUrl}/tools/group?${groupName}/delete`,
+        getUsers: () => `${UrlBuilder.baseUrl}/tools/users`
     },
     requests:{
         prolong: (requestId:string) => `${UrlBuilder.baseUrl}/requests/${requestId}/prolong`,
