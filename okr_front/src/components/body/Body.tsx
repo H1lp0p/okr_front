@@ -1,21 +1,22 @@
-import { useState } from 'react'
+import {useState} from 'react'
 import './Body.css'
-import { Routes, Route, Link, useNavigate } from 'react-router-dom';
+import {Routes, Route, Link, useNavigate} from 'react-router-dom';
 import Login from '../login-form/LoginForm';
-import Registration from '../register-form/Register-form';
+import Registration from '../register-form/register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
 import BaseProps from '../Base/BasePropsInterface'
 import RequestInfo from '../Requests/requestInfo/RequestInfo'
 import RequestInfoModel from '../../models/RequstModel'
 import Attachment from '../../models/Attachmet'
-import { RequestStatuses, RequestTypes } from '../../types/request'
+import {RequestStatuses, RequestTypes} from '../../types/request'
 import RequestList from '../requestList/RequestList';
 import Filter, {filterInterface} from '../filterForm/FilterForm';
 import endpoint from '../../api/endpoints';
 import Edit from '../pages/edit/Edit';
+import GanttTable from "../gant/gant.tsx";
 
-interface BodyProps extends BaseProps{
+interface BodyProps extends BaseProps {
 
 }
 
@@ -26,20 +27,20 @@ function Body() {
 
   const logout = () => {
     user.logout().then(res => {
-      setUser(prewUser => res)
+      setUser(() => res)
     })
   }
 
   const login = (email: string, password: string) => {
     user.login(email, password).then(res => {
       console.log("LOGIN", res);
-        setUser(prewUser => res);
+        setUser(() => res);
     })
   }
   const register = (email: string, name:string, bithdate: string,  password: string) => {
     user.register(name.split(" ")[1], email, name.split(" ")[0], name.split(" ")[2], bithdate, password).then(res => {
       console.log("REGISTER", res);
-      setUser(prewUser => res);
+      setUser(() => res);
     })
   }
 
@@ -47,6 +48,8 @@ function Body() {
       setFilterState(formData);
     }
 
+
+      
   return (
     <>
       <Header
@@ -62,11 +65,18 @@ function Body() {
 
         </>}/>
         <Route path='/worker' element={
-          <RequestList
-          className=''
-          isMainPage={false}
-          user={user}
-        />
+          <>
+            <Filter 
+              onSubmin={gant}
+            />
+            <RequestList
+              className='h-75'
+              isMainPage={false}
+              user={user}
+              filtration={filterState}
+            />
+          </>
+          
         }/>
         <Route path="/login" element={
           <Login
@@ -77,6 +87,10 @@ function Body() {
           <Filter 
             onSubmit={gant}
             onDownload={() => {}}
+          />
+          <GanttTable
+              filtration={filterState}
+              jwt={user.Jwt}
           />
         {/*
           <Filter 

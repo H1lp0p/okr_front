@@ -7,10 +7,12 @@ import BaseProps from "../../Base/BasePropsInterface";
 import CustomInput from "../../inputs/CustomInput";
 import { StatusChip, TypeChip } from "../chips/Chips";
 
-import './RequestFull.css'
+
 import { EventHandler, useCallback, useEffect, useState } from "react";
 import RequestInfo from "../requestInfo/RequestInfo";
 import { useDropzone } from "react-dropzone";
+
+import './RequestFull.css'
 
 interface RequestFullProps extends BaseProps{
     isNew?: boolean,
@@ -38,6 +40,7 @@ function RequestFull(props: RequestFullProps){
             request.requestType
         )
     }
+    
 
     const role = props.maxUserRole ? props.maxUserRole : Roles.student
 
@@ -49,17 +52,15 @@ function RequestFull(props: RequestFullProps){
     const [CheckStatus, setCheckStatus] = useState(request? request.isDocInCabinet : false)
 
     const dropFileCallback = useCallback((acceptedFiles : File[]) => {
-        acceptedFiles.forEach((val, ind) => {
-            console.log(val.name);
-        })
         //!!!NEW ATTACHMENT
         let newAttachments = acceptedFiles.map((el) => {
-            return new Attachment(el.name, new Date(), el)
+            return new Attachment(el.name, new Date(), el, "-1")
         })
 
         let temp = copy(newRequest)
         temp.attachments = [...newAttachments, ...temp.attachments]
         setNewRequest(temp)
+        
 
     }, [])
 
@@ -144,15 +145,13 @@ function RequestFull(props: RequestFullProps){
         if (props.changeRequest){
             props.changeRequest(newRequest)
         }
-        //There we need to call changeRequest with new data (probably need to pass each data field seperately)
-        //And in RequestList in func editRequest will be all fetches.
     }
 
     return (
         <form onSubmit={onSubmit} className={`d-flex flex-column ${props.className}`}>
-            <div className={`m-2 request-full ${props.className}`}>
-                <div className={`rounded h-100 w-100 pe-3 ${requestClassName}`} style={{overflowY: "scroll", overflowX: 'clip', maxHeight: "75vh"}}>
-                    
+            <div className={`m-2 p-2 card-view`}>
+                <div className={`rounded request-full w-100 pe-3 ${requestClassName}`} style={{overflowY: "scroll", overflowX: 'clip', height: "60vh"}}>
+
                     <div className="w-100 p-5 d-flex flex-row justify-content-between">
                         <div>
                             <div className="h2">
@@ -225,7 +224,7 @@ function RequestFull(props: RequestFullProps){
                 </div>
             </div>
 
-            <button type="submit" className={`m-2 btn ${!isEdited ? "disabled" : ""}`}>Сохранить</button>
+            <button type="submit" className={`m-2 btn btn-lg align-self-bottom ${!isEdited ? "disabled" : ""}`}>Сохранить</button>
         </form>
     )
 }

@@ -15,6 +15,8 @@ interface RequestInfoProps extends BaseProps{
 function RequestInfo(props: RequestInfoProps) {
     const {request, selectedId} = props
 
+    //console.log("REQUESTINFO", request);
+
     let trowRequest = props.onSelect ? props.onSelect : (request: RequestInfoModel) => {}
 
     const requestStyle = (type: RequestTypes, selected = "") => {
@@ -44,7 +46,7 @@ function RequestInfo(props: RequestInfoProps) {
                         {request.studentName}
                     </div>
                     <div className="text-secondary">
-                        {request.groupList.join("; ")}
+                        {request.groupList}
                     </div>
                 </div>
                 <div className="d-flex align-items-center justify-content-end flex-grow-1">
