@@ -78,8 +78,8 @@ const getDateRange = (data: Data): { start: Date; end: Date } => {
 };
 
 interface GanttProps extends BaseProps{
-    filtration?: filterInterface
-    jwt?: string | null | undefined
+    filtration: filterInterface
+    jwt: string
 }
 
 
@@ -95,6 +95,13 @@ function GanttTable(props : GanttProps) {
         );
         console.log(data);
     }, []);
+
+    useEffect(() => {
+        endpoint.gant.gant(jwt, filters).then(
+            data => setData({"groups": data.groups})
+        );
+        console.log(data);
+    }, [JSON.stringify(filters)]);
 
     const { start, end } = getDateRange(data);
     const allDates = getDatesInRange(start.toISOString().split("T")[0], end.toISOString().split("T")[0]);

@@ -57,11 +57,16 @@ function RequestFull(props: RequestFullProps){
             return new Attachment(el.name, new Date(), el, "-1")
         })
 
+        console.log(newAttachments)
+
         let temp = copy(newRequest)
         temp.attachments = [...newAttachments, ...temp.attachments]
-        setNewRequest(temp)
         
+        let newEdited = newAttachments.length > 0
 
+        setEdited(newEdited)
+
+        setNewRequest(temp)
     }, [])
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop: dropFileCallback})
@@ -129,7 +134,7 @@ function RequestFull(props: RequestFullProps){
         let temp = copy(newRequest)
         temp.requestStatus = newStatus
 
-        let edited = temp.requestStatus == request.requestStatus
+        let edited = temp.requestStatus != request.requestStatus
 
         setEdited(edited)
 

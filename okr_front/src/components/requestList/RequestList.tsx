@@ -13,6 +13,8 @@ import UserModel from "../../models/UserModel";
 import endpoint from "../../api/endpoints";
 import FiltrationInterface from "../../types/filtraton";
 import { filterInterface } from "../filterForm/FilterForm";
+import { jsx } from "react/jsx-runtime";
+import React from "react";
 
 
 interface RequestListProps extends BaseProps{
@@ -173,18 +175,31 @@ function RequestList(props: RequestListProps){
     //And if we need to change dates - fetch "prolonge" request, if we need to change status - fetch "setStatus" and exc.
     const editRequest = (newRequest : RequestInfoModel) => {
       if (newRequest.id == newItemId){
-        endpoint.request.add(user.Jwt!, newRequest).then(res => {
-          console.log("---------end--------");
-          
-        })
+        endpoint.request.add(user.Jwt!, newRequest)
       }
-      if (newRequest.endDate != selectedItem?.endDate){
-        //fetch prolonge
+      else {
+        console.log(newRequest.attachments)
+        if (newRequest.endDate != selectedItem?.endDate){
+          endpoint.request.prolong(user.Jwt!, newRequest)
+        }
+        else if (newRequest.attachments.filter((el) => {return el.id == "-1"}).length > 0){
+          let atts = newRequest.attachments.filter((el) => {return el.id == "-1"})
+          endpoint.request.attach(user.Jwt!, newRequest)
+        }
+        else if (
+          (newRequest.requestStatus != selectedItem.requestStatus ||
+          newRequest.requestType != selectedItem.requestType ||
+          newRequest.beginDate != selectedItem.beginDate || 
+          newRequest.endDate != selectedItem.endDate) && user.Roles.indexOf(Roles.worker) != -1
+        ){
+          endpoint.request.edit(user.Jwt!, newRequest)
+        }
       }
       setSelected(newRequest)
     }
 
     const filtration = props.filtration ? props.filtration : {} as filterInterface
+    
 
     const [currentPage, setPage] = useState(0)
     const [pageSize, setSize] = useState(10)
@@ -244,12 +259,10 @@ function RequestList(props: RequestListProps){
       //console.log("UPDATE");
       
       setPageLoading(true)
-      console.log(currentPage);
       
       if (isMainPage){
         endpoint.request.getMy(user.Jwt!, {page: currentPage, pageSize: pageSize}).then(result => {
           let pagination = result.paginationDto
-          console.log(pagination);
           let data = result.requests
   
           let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
@@ -280,7 +293,6 @@ function RequestList(props: RequestListProps){
           let newArray = [...currentData, ...arrayOfRequests]
   
           setData(newArray)
-          console.log(newArray);
           
           setPageLoading(false)
         })
@@ -288,7 +300,6 @@ function RequestList(props: RequestListProps){
       else{
         endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
           let pagination = result.paginationDto
-          console.log(pagination);
           let data = result.requests
   
           let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
@@ -319,7 +330,6 @@ function RequestList(props: RequestListProps){
           let newArray = [...currentData, ...arrayOfRequests]
   
           setData(newArray)
-          console.log(newArray);
           
           setPageLoading(false)
         })
@@ -333,7 +343,6 @@ function RequestList(props: RequestListProps){
       if (isMainPage){
         endpoint.request.getMy(user.Jwt!, {page: currentPage, pageSize: pageSize}).then(result => {
           let pagination = result.paginationDto
-        console.log(pagination);
         
         let data = result.requests
 
@@ -365,17 +374,14 @@ function RequestList(props: RequestListProps){
         setData(arrayOfRequests)
 
         setCount(pagination.count)
-        console.log(itemsCount);
         
 
-        console.log(arrayOfRequests);
         setLoading(false)
         })
       }
       else{
         endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
           let pagination = result.paginationDto
-          console.log(pagination);
           
           let data = result.requests
   
@@ -407,52 +413,96 @@ function RequestList(props: RequestListProps){
           setData(arrayOfRequests)
   
           setCount(pagination.count)
-          console.log(itemsCount);
-          
-  
-          console.log(arrayOfRequests);
+        
           setLoading(false)
         })
       }
       
     }, [])
 
-    // useEffect(() => {
-    //   setLoading(true)
-    //   endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPagination.pageIndex, pageSize: currentPagination.pageSize}).then(result => {
-    //     let pagination = result.paginationDto
-    //     let data = result.requests
+    useEffect(() => {
+      setLoading(true)
 
-    //     let arrayOfRequests = data.map((el: any) => {
-    //       let attachments = el.confirmationFiles
+      if (isMainPage){
+        endpoint.request.getMy(user.Jwt!, {page: currentPage, pageSize: pageSize}).then(result => {
+          let pagination = result.paginationDto
+        
+        let data = result.requests
 
-    //       let atts:Attachment[] = []
+        let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
+          let attachments = el.confirmationFiles
 
-    //       atts = attachments.map((att: any) => {
-    //         return new Attachment(att.name,
-    //           new Date(att.attachDate),
+          let atts:Attachment[] = []
 
-    //         )
-    //       })
+          atts = attachments.map((att: any) => {
+            return new Attachment(att.name,
+              new Date(att.attachDate),
+              undefined,
+              el.id
+            )
+          })
 
-    //       return new RequestInfoModel(
-    //         el.id,
-    //         el.startDate,
-    //         el.endDate,
-    //         atts,
-    //         el.creator.name,
-    //         [el.creator.groupName],
-    //         el.status,
-    //         el.type
-    //       )
-    //     })
+          return new RequestInfoModel(
+            el.id,
+            new Date(el.startDate),
+            new Date(el.endDate),
+            atts,
+            `${el.creator.name} ${el.creator.surname}`,
+            [el.creator.groupName],
+            toStatus(el.status),
+            toType(el.type)
+          )
+        })
 
-    //     setPagination(pagination)
-    //     setData(arrayOfRequests)
+      setData(arrayOfRequests)
 
-    //     console.log(arrayOfRequests);
-    //   })
-    // }, [filtration])
+      setCount(pagination.count)
+      
+
+      setLoading(false)
+      })
+    }
+    else{
+      endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
+        let pagination = result.paginationDto
+        
+        let data = result.requests
+
+        let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
+          let attachments = el.confirmationFiles
+
+          let atts:Attachment[] = []
+
+          atts = attachments.map((att: any) => {
+            return new Attachment(att.name,
+              new Date(att.attachDate),
+              undefined,
+              el.id
+            )
+          })
+
+          return new RequestInfoModel(
+            el.id,
+            new Date(el.startDate),
+            new Date(el.endDate),
+            atts,
+            `${el.creator.name} ${el.creator.surname}`,
+            [el.creator.groupName],
+            toStatus(el.status),
+            toType(el.type)
+          )
+        })
+
+        setData(arrayOfRequests)
+
+        setCount(pagination.count)
+        
+
+        setLoading(false)
+      })
+    }
+    
+  }, [JSON.stringify(filtration)])
 
     return (
         <div className={`d-flex flex-row p-4 w-100 align-self-stretch justify-content-center ${props.className}`}>
@@ -465,15 +515,15 @@ function RequestList(props: RequestListProps){
                     <>
                       {currentData.map((el, it) => {
                         return (
-                          <>
+                          <React.Fragment key={`${el.id}_${it}`}>
                             <RequestInfo
                                 className={`${it == currentData.length - 1 ? "pb-4" : ""}`}
                                 onSelect={select}
                                 selectedId={selectedItem? selectedItem.id : ""}
                                 request={el}
-                                key={`${el.id}_${it}`}
+                                
                             />
-                          </>
+                          </React.Fragment>
                             
                         )
                       })}

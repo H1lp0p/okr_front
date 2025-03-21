@@ -70,19 +70,20 @@ const endpoint = {
         },
     },
     gant:{
-        gant: (jwt:string, data: {surname?:string, group?:string, subgroup?:string, favourite?:boolean, dateStart?:Date, dateEnd?:Date}) => {
-            return fetch(UrlBuilder.students.gant(), {
+        gant: (jwt:string, data: FiltrationInterface) => {
+            let query = new URLSearchParams({...data})
+            return fetch(`${UrlBuilder.students.gant()}?${query.toString()}`, {
                 method:"GET",
                 headers:{
                     'Authorization': `Bearer ${jwt}`
-                },
-                body: JSON.stringify(data)
+                }
             }).then(response => response.json()).then(res => {
                 return res
             }).catch(error => {throw new Error(error)})
         },
-        downloadCSV: (jwt:string, data: {surname?:string, group?:string, subgroup?:string, favourite?:boolean, dateStart?:Date, dateEnd?:Date}) => {
-            return fetch(UrlBuilder.requests.export(), {
+        downloadCSV: (jwt:string, data: FiltrationInterface) => {
+            let query = new URLSearchParams({...data})
+            return fetch(`${UrlBuilder.requests.export()}?${query.toString()}`, {
                 method:"GET",
                 headers:{
                     'Authorization': `Bearer ${jwt}`
@@ -121,8 +122,6 @@ const endpoint = {
 
         add: async (jwt: string, newRequest: RequestInfoModel) => {
 
-            console.log(newRequest);
-
             let files = await Promise.all(newRequest.attachments.map((el) => {
                 return readFileBytes(el.file!).then(res => {
                     return {
@@ -132,16 +131,12 @@ const endpoint = {
                 })
             }))
 
-
-
             let data = {
                 startDate: newRequest.beginDate.toISOString().slice(0, 10),
                 endDate: newRequest.endDate.toISOString().slice(0, 10),
                 type: newRequest.requestType,
                 confirmationFiles: files
             }
-
-            console.log("--------data---------", data);
             
 
             return fetch(UrlBuilder.requests.create(), {
@@ -162,8 +157,8 @@ const endpoint = {
         },
         edit: (jwt: string, newRequest: RequestInfoModel) => {
             let data = {
-                startDate: newRequest.beginDate,
-                endDate: newRequest.endDate,
+                startDate: newRequest.beginDate.toISOString().slice(0, 10),
+                endDate: newRequest.endDate.toISOString().slice(0, 10),
                 type: newRequest.requestType,
                 status: newRequest.requestStatus
             }
@@ -171,6 +166,7 @@ const endpoint = {
             return fetch(UrlBuilder.requests.edit(newRequest.id), {
                 method: "PUT",
                 headers: {
+                    "Content-Type":"application/json",
                     "Authorization": `Bearer ${jwt}`
                 },
                 body: JSON.stringify(data)
@@ -185,12 +181,13 @@ const endpoint = {
         },
         prolong: (jwt: string, newRequest: RequestInfoModel) => {
             let data = {
-                newEndDate: newRequest.endDate
+                newEndDate: newRequest.endDate.toISOString().slice(0, 10)
             }
 
             return fetch(UrlBuilder.requests.prolong(newRequest.id), {
                 method: "PUT",
                 headers: {
+                    "Content-Type":"application/json",
                     "Authorization": `Bearer ${jwt}`
                 },
                 body: JSON.stringify(data)
@@ -203,21 +200,24 @@ const endpoint = {
                 }
             }).catch(err => {throw new Error(err)})
         },
-        attach: (jwt: string, newRequest: RequestInfoModel) => {
+        attach: async (jwt: string, newRequest: RequestInfoModel) => {
 
-            let data = newRequest.attachments.map((el) => {
+            let files = await Promise.all(newRequest.attachments.filter((el) => {return el.id == "-1"}).map((el) => {
+                return readFileBytes(el.file!).then(res => {
                     return {
-                        file: el.file,
+                        file: res.map((el) => el).join(''),
                         fileName: el.fileName
                     }
                 })
+            }))
 
-            return fetch(UrlBuilder.requests.prolong(newRequest.id), {
+            return fetch(UrlBuilder.requests.confirm(newRequest.id), {
                 method: "POST",
                 headers: {
+                    "Content-Type":"application/json",
                     "Authorization": `Bearer ${jwt}`
                 },
-                body: JSON.stringify(data)
+                body: JSON.stringify(files)
             }).then(respose => {
                 if (respose.ok){
                     return true
