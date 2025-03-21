@@ -53,57 +53,57 @@ function Body() {
       <Header
         user={user}
         logout={logout}/>
-      <Routes>
-        <Route path="/" element={<>
-          <RequestList
-            className=''
-            isMainPage={true}
-            user={user}
-          />
+      <div className='list-view pb-3' style={{height: "90vh"}}>
 
-        </>}/>
-        <Route path='/worker' element={
-          <>
+      
+        <Routes>
+          <Route path="/" element={<>
+            <RequestList
+              className=''
+              isMainPage={true}
+              user={user}
+            />
+          </>}/>
+          <Route path='/worker' element={
+            <>
+              <Filter 
+                onSubmit={gant}
+                onDownload={() => {}}
+              />
+              <RequestList
+                className='h-75'
+                isMainPage={false}
+                user={user}
+                filtration={filterState}
+              />
+            </>
+            
+          }/>
+          <Route path="/login" element={
+            <Login
+            login={login}/>}
+            />
+          <Route path="/registration" element={<Registration registration={register}/>}/>
+          <Route path="/gant" element={<>
             <Filter 
               onSubmit={gant}
               onDownload={() => {}}
             />
-            <RequestList
-              className='h-75'
-              isMainPage={false}
-              user={user}
-              filtration={filterState}
+            <GanttTable
+                filtration={filterState}
+                jwt={user.Jwt!}
             />
-          </>
-          
-        }/>
-        <Route path="/login" element={
-          <Login
-          login={login}/>}
-          />
-        <Route path="/registration" element={<Registration registration={register}/>}/>
-        <Route path="/gant" element={<>
-          <Filter 
-            onSubmit={gant}
-            onDownload={() => {}}
-          />
-          <GanttTable
-              filtration={filterState}
-              jwt={user.Jwt!}
-          />
-        {/*
-          <Filter 
-            onSubmin={gant}
-          />
-          <SonyaComponent
-            filterState={filterState}
-          />
-        */}
-        </>}/>
-        <Route path="/Edit" element={<Edit
-        user={user}
-        />}/>
-      </Routes>
+          {/*
+            <Filter 
+              onSubmin={gant}
+            />
+            <SonyaComponent
+              filterState={filterState}
+            />
+          */}
+          </>}/>
+        </Routes>
+      </div>
     </>
   )
 }
