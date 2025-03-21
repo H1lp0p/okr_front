@@ -44,8 +44,6 @@ function Body() {
   }
 
   const gant = (formData:filterInterface) => {
-    console.log("GANT", formData);
-      
     setFilterState(formData);
     }
       

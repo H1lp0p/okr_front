@@ -12,7 +12,7 @@ function DateGroup(props: DateGroupProps){
     const {start, end} = props
     
     const toStr = (date: Date) => {
-        return `${date.getDate() < 10 ? "0" + date.getDate(): date.getDate()}.${date.getMonth() < 10 ? "0"+date.getMonth() : date.getMonth()}.${date.getFullYear()}`
+        return `${date.getDate() < 10 ? "0" + date.getDate(): date.getDate()}.${date.getMonth() < 10 ? "0"+ (date.getMonth() + 1) : date.getMonth()}.${date.getFullYear()}`
     }
 
     return (

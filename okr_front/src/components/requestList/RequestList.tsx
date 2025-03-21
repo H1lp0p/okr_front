@@ -11,7 +11,6 @@ import { data } from "react-router-dom";
 import { Roles } from "../../types/user";
 import UserModel from "../../models/UserModel";
 import endpoint from "../../api/endpoints";
-import FiltrationInterface from "../../types/filtraton";
 import { filterInterface } from "../filterForm/FilterForm";
 import { jsx } from "react/jsx-runtime";
 import React from "react";
@@ -298,7 +297,14 @@ function RequestList(props: RequestListProps){
         })
       }
       else{
-        endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
+        endpoint.worker.getRequests(user.Jwt!, {
+            surname: filtration.surname,
+            group: filtration.group,
+            subgroup: filtration.subgroup,
+            favourite: filtration.favourite,
+            dateStart: filtration.dateStart?.toISOString().slice(0, 10),
+            dateEnd: filtration.dateEnd?.toISOString().slice(0, 10)
+        }, {page: currentPage, pageSize: pageSize}).then(result => {
           let pagination = result.paginationDto
           let data = result.requests
   
@@ -380,7 +386,14 @@ function RequestList(props: RequestListProps){
         })
       }
       else{
-        endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
+        endpoint.worker.getRequests(user.Jwt!, {
+            surname: filtration.surname,
+            group: filtration.group,
+            subgroup: filtration.subgroup,
+            favourite: filtration.favourite,
+            datestart: filtration.datestart?.toisostring().slice(0, 10),
+            dateend: filtration.dateend?.toisostring().slice(0, 10)
+        }, {page: currentPage, pageSize: pageSize}).then(result => {
           let pagination = result.paginationDto
           
           let data = result.requests
@@ -463,7 +476,14 @@ function RequestList(props: RequestListProps){
       })
     }
     else{
-      endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
+      endpoint.worker.getRequests(user.Jwt!, {
+            surname: filtration.surname,
+            group: filtration.group,
+            subgroup: filtration.subgroup,
+            favourite: filtration.favourite,
+            datestart: filtration.datestart?.toisostring().slice(0, 10),
+            dateend: filtration.dateend?.toisostring().slice(0, 10)
+        }, {page: currentPage, pageSize: pageSize}).then(result => {
         let pagination = result.paginationDto
         
         let data = result.requests

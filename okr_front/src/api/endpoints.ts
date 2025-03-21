@@ -1,7 +1,7 @@
 import { jsx } from "react/jsx-runtime"
 import { Roles } from "../types/user"
 import UrlBuilder from "./urlBuilder";
-import FiltrationInterface from "../types/filtraton";
+import { filterInterface } from "../components/filterForm/FilterForm";
 import RequestInfoModel from "../models/RequstModel";
 
 const readFileBytes = (file: File): Promise<Uint8Array> => {
@@ -70,8 +70,15 @@ const endpoint = {
         },
     },
     gant:{
-        gant: (jwt:string, data: FiltrationInterface) => {
-            let query = new URLSearchParams({...data})
+        gant: (jwt:string, filtration: {
+            surname?: string,
+            group?: string,
+            subgroup?: string,
+            favourite?: boolean,
+            dateStart?: string,
+            dateEnd?: string
+        },) => {
+            let query = new URLSearchParams(Object.entries(filtration).filter((el) => el[1]!=undefined && el[1].toString().length > 1).map((el) => [el[0], el[1].toString()]))
             return fetch(`${UrlBuilder.students.gant()}?${query.toString()}`, {
                 method:"GET",
                 headers:{
@@ -81,22 +88,40 @@ const endpoint = {
                 return res
             }).catch(error => {throw new Error(error)})
         },
-        downloadCSV: (jwt:string, data: FiltrationInterface) => {
-            let query = new URLSearchParams({...data})
+        downloadCSV: (jwt:string, filtration: {
+            surname?: string,
+            group?: string,
+            subgroup?: string,
+            favourite?: boolean,
+            dateStart?: string,
+            dateEnd?: string
+        },) => {
+            let query = new URLSearchParams(Object.entries(filtration).filter((el) => el[1]!=undefined && el[1].toString().length > 1).map((el) => [el[0], el[1].toString()]))
             return fetch(`${UrlBuilder.requests.export()}?${query.toString()}`, {
                 method:"GET",
                 headers:{
                     'Authorization': `Bearer ${jwt}`
-                },
-                body: JSON.stringify(data)
+                }
             }).then(response => response.json()).then(res => {//Что делать с response? Должен же быть CSV?
                 return res
             }).catch(error => {throw new Error(error)})
         }
     },
     worker: {
-        getRequests: (jwt: string, filtration: FiltrationInterface, pagination: {page: number, pageSize: number}) => {
-            let query = new URLSearchParams({...filtration, pageIndex: pagination.page.toString(), pageSize: pagination.pageSize.toString()})
+        getRequests: (jwt: string, filtration: {
+            surname?: string,
+            group?: string,
+            subgroup?: string,
+            favourite?: boolean,
+            dateStart?: string,
+            dateEnd?: string
+        },
+            pagination: {page: number, pageSize: number}
+        ) => {
+            let query = new URLSearchParams([...Object.entries(filtration).filter((el) => el[1]!=undefined && el[1].toString().length > 1).map((el) => [el[0], el[1].toString()]),
+                ["pageIndex", pagination.page.toString()],
+                ["pageSize", pagination.pageSize.toString()]])
+            
             return fetch(`${UrlBuilder.requests.getAll()}?${query.toString()}`, {
                 method: "GET",
                 headers: {

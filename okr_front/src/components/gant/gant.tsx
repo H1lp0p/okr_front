@@ -90,14 +90,28 @@ function GanttTable(props : GanttProps) {
     const [data, setData] = useState<Data>({"groups": []});
 
     useEffect(() => {
-        endpoint.gant.gant(jwt, filters).then(
+        endpoint.gant.gant(jwt, {
+            surname: filters.surname,
+            group: filters.group,
+            subgroup: filters.subgroup,
+            favourite: filters.favourite,
+            dateStart: filters.dateStart?.toISOString().slice(0, 10),
+            dateEnd: filters.dateEnd?.toISOString().slice(0, 10)
+        }).then(
             data => setData({"groups": data.groups})
         );
         console.log(data);
     }, []);
 
     useEffect(() => {
-        endpoint.gant.gant(jwt, filters).then(
+        endpoint.gant.gant(jwt, {
+            surname: filters.surname,
+            group: filters.group,
+            subgroup: filters.subgroup,
+            favourite: filters.favourite,
+            dateStart: filters.dateStart?.toISOString().slice(0, 10),
+            dateEnd: filters.dateEnd?.toISOString().slice(0, 10)
+        }).then(
             data => setData({"groups": data.groups})
         );
         console.log(data);
