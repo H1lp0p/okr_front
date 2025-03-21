@@ -22,6 +22,8 @@ function Edit(props: EditProps){
     const [userData, setUserData] = useState<{id:string, name:string, surname:string}>();
     const [groupName, setGroupName] = useState("");
     const [subGroupName, setSubGroupName] = useState("");
+    const [groupModalIsOpen, setGroupModalIsOpen] = useState(false);
+    const [group, setGroup] = useState("");
 
     useEffect(() => {
         endpoint.admin.getUsers(props.user.Jwt!).then((res) => {
@@ -110,6 +112,27 @@ function Edit(props: EditProps){
             }
         }
     }
+    const addGroup = () => {
+        setGroupModalIsOpen(true);
+    };
+    const closeGroupModal = () => {
+        setGroupModalIsOpen(false);
+    };
+    const handleGroupInputChange = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+        const val = event.target.value;
+        setGroup(val);
+    }
+    const handleAddGroup = () => {
+        console.log(group)
+        if (group != ""){
+           try{
+                endpoint.tools.addGroup(props.user.Jwt!, group);
+                closeGroupModal();
+           }catch(e: any){
+            setError(e);
+            }
+        }
+    }
     return (
     <>
         <div>
@@ -169,6 +192,22 @@ function Edit(props: EditProps){
                     onClick={handleAddSubgroup}
                 >Добавить</button>
                 <button className="btn btn-danger" onClick={closeSubGroupModal}>Закрыть</button>
+            </Modal>
+            <button onClick={addGroup}>Добавить группу</button>
+            <Modal isOpen={groupModalIsOpen} onRequestClose={closeGroupModal}>
+                <CustomInput
+                    inputType="text"
+                    placehodler="Введите название группы"
+                    classAttr=""
+                    onChange={handleGroupInputChange}
+                    required={false}
+                    ></CustomInput>
+                <button
+                    type="button"
+                    className="btn btn-secondary add-group-btn"
+                    onClick={handleAddGroup}
+                >Добавить</button>
+                <button className="btn btn-danger" onClick={closeGroupModal}>Закрыть</button>
             </Modal>
         </div>
     </>

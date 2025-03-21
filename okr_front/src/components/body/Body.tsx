@@ -2,7 +2,7 @@ import {useState} from 'react'
 import './Body.css'
 import {Routes, Route, Link, useNavigate} from 'react-router-dom';
 import Login from '../login-form/LoginForm';
-import Registration from '../register-form/register-form';
+import Registration from '../register-form/Register-form';
 import UserModel from '../../models/UserModel'
 import Header from '../header/Header'
 import BaseProps from '../Base/BasePropsInterface'
@@ -12,7 +12,6 @@ import Attachment from '../../models/Attachmet'
 import {RequestStatuses, RequestTypes} from '../../types/request'
 import RequestList from '../requestList/RequestList';
 import Filter, {filterInterface} from '../filterForm/FilterForm';
-import endpoint from '../../api/endpoints';
 import Edit from '../pages/edit/Edit';
 import GanttTable from "../gant/gant.tsx";
 
