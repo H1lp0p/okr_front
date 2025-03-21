@@ -14,6 +14,7 @@ import RequestList from '../requestList/RequestList';
 import Filter, {filterInterface} from '../filterForm/FilterForm';
 import Edit from '../pages/edit/Edit';
 import GanttTable from "../gant/gant.tsx";
+import endpoint from '../../api/endpoints.ts';
 
 interface BodyProps extends BaseProps {
 
@@ -88,6 +89,11 @@ function Body() {
               />
             </>
             
+          }/>
+          <Route path='/edit' element={
+            <Edit
+              user={user}
+            ></Edit>
           }/>
           <Route path="/login" element={
             <Login

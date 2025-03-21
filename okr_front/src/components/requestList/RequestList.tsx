@@ -530,7 +530,7 @@ function RequestList(props: RequestListProps){
 
               {maxUserRole == Roles.student && <button className={`btn btn-secondary btn-lg m-4`} onClick={() => {addNewRequest()}}>Новый запрос</button>}
 
-              <div className={`card-view list-view`} onScroll={scrollHandler}>
+              <div className={`card-view list-view`} style={{maxHeight: "50vh"}} onScroll={scrollHandler}>
                   {!isLoading && 
                     <>
                       {currentData.map((el, it) => {
