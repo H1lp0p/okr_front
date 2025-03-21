@@ -36,7 +36,7 @@ function RequestList(props: RequestListProps){
 
     const roles = user.Roles
     
-    const isMainPage = props.isMainPage ? props.isMainPage : true
+    const isMainPage = props.isMainPage != undefined ? props.isMainPage : true
 
     const maxUserRole = (roles.indexOf(Roles.worker) != -1 && !isMainPage)? Roles.worker : Roles.student
 
@@ -172,8 +172,11 @@ function RequestList(props: RequestListProps){
     //there we need to compare selectedItem and newRequest.
     //And if we need to change dates - fetch "prolonge" request, if we need to change status - fetch "setStatus" and exc.
     const editRequest = (newRequest : RequestInfoModel) => {
-      if (newRequest.id == null){
-
+      if (newRequest.id == newItemId){
+        endpoint.request.add(user.Jwt!, newRequest).then(res => {
+          console.log("---------end--------");
+          
+        })
       }
       if (newRequest.endDate != selectedItem?.endDate){
         //fetch prolonge
@@ -184,7 +187,7 @@ function RequestList(props: RequestListProps){
     const filtration = props.filtration ? props.filtration : {} as filterInterface
 
     const [currentPage, setPage] = useState(0)
-    const [pageSize, setSize] = useState(8)
+    const [pageSize, setSize] = useState(10)
 
     const [currentData, setData] = useState<RequestInfoModel[]>([])
 
@@ -243,49 +246,93 @@ function RequestList(props: RequestListProps){
       setPageLoading(true)
       console.log(currentPage);
       
-      endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
-        let pagination = result.paginationDto
-        console.log(pagination);
-        let data = result.requests
-
-        let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
-          let attachments = el.confirmationFiles
-
-          let atts:Attachment[] = []
-
-          atts = attachments.map((att: any) => {
-            return new Attachment(att.name,
-              new Date(att.attachDate),
-              undefined,
-              el.id
+      if (isMainPage){
+        endpoint.request.getMy(user.Jwt!, {page: currentPage, pageSize: pageSize}).then(result => {
+          let pagination = result.paginationDto
+          console.log(pagination);
+          let data = result.requests
+  
+          let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
+            let attachments = el.confirmationFiles
+  
+            let atts:Attachment[] = []
+  
+            atts = attachments.map((att: any) => {
+              return new Attachment(att.name,
+                new Date(att.attachDate),
+                undefined,
+                el.id
+              )
+            })
+  
+            return new RequestInfoModel(
+              el.id,
+              new Date(el.startDate),
+              new Date(el.endDate),
+              atts,
+              `${el.creator.name} ${el.creator.surname}`,
+              [el.creator.groupName],
+              toStatus(el.status),
+              toType(el.type)
             )
           })
-
-          return new RequestInfoModel(
-            el.id,
-            new Date(el.startDate),
-            new Date(el.endDate),
-            atts,
-            `${el.creator.name} ${el.creator.surname}`,
-            [el.creator.groupName],
-            toStatus(el.status),
-            toType(el.type)
-          )
+  
+          let newArray = [...currentData, ...arrayOfRequests]
+  
+          setData(newArray)
+          console.log(newArray);
+          
+          setPageLoading(false)
         })
-
-        let newArray = [...currentData, ...arrayOfRequests]
-
-        setData(newArray)
-        console.log(newArray);
-        
-        setPageLoading(false)
-      })
+      }
+      else{
+        endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
+          let pagination = result.paginationDto
+          console.log(pagination);
+          let data = result.requests
+  
+          let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
+            let attachments = el.confirmationFiles
+  
+            let atts:Attachment[] = []
+  
+            atts = attachments.map((att: any) => {
+              return new Attachment(att.name,
+                new Date(att.attachDate),
+                undefined,
+                el.id
+              )
+            })
+  
+            return new RequestInfoModel(
+              el.id,
+              new Date(el.startDate),
+              new Date(el.endDate),
+              atts,
+              `${el.creator.name} ${el.creator.surname}`,
+              [el.creator.groupName],
+              toStatus(el.status),
+              toType(el.type)
+            )
+          })
+  
+          let newArray = [...currentData, ...arrayOfRequests]
+  
+          setData(newArray)
+          console.log(newArray);
+          
+          setPageLoading(false)
+        })
+      }
+      
     }, [currentPage])
 
     useEffect(() => {
       setLoading(true)
-      endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
-        let pagination = result.paginationDto
+
+      if (isMainPage){
+        endpoint.request.getMy(user.Jwt!, {page: currentPage, pageSize: pageSize}).then(result => {
+          let pagination = result.paginationDto
         console.log(pagination);
         
         let data = result.requests
@@ -323,7 +370,51 @@ function RequestList(props: RequestListProps){
 
         console.log(arrayOfRequests);
         setLoading(false)
-      })
+        })
+      }
+      else{
+        endpoint.worker.getRequests(user.Jwt!, filtration, {page: currentPage, pageSize: pageSize}).then(result => {
+          let pagination = result.paginationDto
+          console.log(pagination);
+          
+          let data = result.requests
+  
+          let arrayOfRequests : RequestInfoModel[] = data.map((el: any) => {
+            let attachments = el.confirmationFiles
+  
+            let atts:Attachment[] = []
+  
+            atts = attachments.map((att: any) => {
+              return new Attachment(att.name,
+                new Date(att.attachDate),
+                undefined,
+                el.id
+              )
+            })
+  
+            return new RequestInfoModel(
+              el.id,
+              new Date(el.startDate),
+              new Date(el.endDate),
+              atts,
+              `${el.creator.name} ${el.creator.surname}`,
+              [el.creator.groupName],
+              toStatus(el.status),
+              toType(el.type)
+            )
+          })
+  
+          setData(arrayOfRequests)
+  
+          setCount(pagination.count)
+          console.log(itemsCount);
+          
+  
+          console.log(arrayOfRequests);
+          setLoading(false)
+        })
+      }
+      
     }, [])
 
     // useEffect(() => {
@@ -364,7 +455,7 @@ function RequestList(props: RequestListProps){
     // }, [filtration])
 
     return (
-        <div className={`d-flex flex-row w-100 align-self-stretch justify-content-center ${props.className}`}>
+        <div className={`d-flex flex-row p-4 w-100 align-self-stretch justify-content-center ${props.className}`}>
             <div className={`d-flex flex-column flex-grow-1 pe-1 me-2`}>
 
               {maxUserRole == Roles.student && <button className={`btn btn-secondary btn-lg m-4`} onClick={() => {addNewRequest()}}>Новый запрос</button>}
@@ -376,6 +467,7 @@ function RequestList(props: RequestListProps){
                         return (
                           <>
                             <RequestInfo
+                                className={`${it == currentData.length - 1 ? "pb-4" : ""}`}
                                 onSelect={select}
                                 selectedId={selectedItem? selectedItem.id : ""}
                                 request={el}
@@ -401,7 +493,7 @@ function RequestList(props: RequestListProps){
                   className="flex-grow-1 align-self-stretch p-2"
                   request={selectedItem}
                   changeRequest={editRequest}
-                  maxUserRole={maxUserRole}/>
+                  maxUserRole={!isMainPage && user.Roles.indexOf(Roles.worker) != -1? Roles.worker : Roles.student}/>
             }
             {!selectedItem && <PlaceHolder/>}
         </div>
