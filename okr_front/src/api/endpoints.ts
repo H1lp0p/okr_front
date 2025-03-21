@@ -182,6 +182,43 @@ const endpoint = {
             }).then(response => {
                 return response.json()
             }).catch(error => {throw new Error(error)})
+        },
+        export: (jwt: string, filtration: {
+            surname?: string,
+            group?: string,
+            subgroup?: string,
+            favourite?: boolean,
+            dateStart?: string,
+            dateEnd?: string
+        }
+        ) => {
+            let query = new URLSearchParams([...Object.entries(filtration).filter((el) => el[1]!=undefined && el[1].toString().length > 1).map((el) => [el[0], el[1].toString()])])
+            return fetch(`${UrlBuilder.requests.trueExport()}?${query.toString()}`, {
+                method: "GET",
+                headers: {
+                    "Authorization": `Bearer ${jwt}`
+                }
+            }).then(res => {
+                return res.blob()
+                //return res.arrayBuffer()
+            }).then(blob => {
+                // const bytes = new Uint8Array(buffer)
+                // const contentType = ".zip"
+                // const blob = new Blob([bytes], {type: contentType} )
+                // if (blob.size > 0){
+                //     const link = document.createElement('a');
+                //     link.href = window.URL.createObjectURL(blob);
+                //     link.download = `file`;
+                //     link.click();
+                // }
+
+                if (blob.size > 0){
+                    const link = document.createElement('a');
+                    link.href = window.URL.createObjectURL(blob);
+                    link.download = `file`;
+                    link.click();
+                }
+            })
         }
     },
     request:{
@@ -303,7 +340,7 @@ const endpoint = {
                     throw new Error(`${respose.status}`)
                 }
             }).catch(err => {throw new Error(err)})
-        },
+        }
     }
 }
 export default endpoint;

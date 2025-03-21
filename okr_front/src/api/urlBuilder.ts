@@ -37,6 +37,7 @@ const UrlBuilder = {
         getMy: () => `${UrlBuilder.baseUrl}/requests/my`,
         export: () => `${UrlBuilder.baseUrl}/requests/export/csv`,
         exportConfirmations: () => `${UrlBuilder.baseUrl}/requests/confirmations/export`,
+        trueExport: () => `${UrlBuilder.baseUrl}/requests/confirmations/export/filtered`,
         exportConfirmation: (confirmationId: string) => `${UrlBuilder.baseUrl}/requests/confirmation/${confirmationId}/export`
     },
     admin: {
