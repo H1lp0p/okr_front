@@ -68,7 +68,18 @@ function Body() {
             <>
               <Filter 
                 onSubmit={gant}
-                onDownload={() => {}}
+                onDownload={(filter) => {
+                  console.log("export");
+                  
+                  endpoint.worker.export(user.Jwt!, {
+                    surname: filter.surname,
+                    group: filter.group,
+                    subgroup: filter.subgroup,
+                    favourite: filter.favourite,
+                    dateStart: filter.dateStart?.toISOString().slice(0, 10),
+                    dateEnd: filter.dateEnd?.toISOString().slice(0, 10)
+                }).then(() => console.log("done"))
+                }}
               />
               <RequestList
                 className='h-75'
