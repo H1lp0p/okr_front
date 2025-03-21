@@ -52,6 +52,8 @@ const endpoint = {
             })
             .catch(error => {throw new Error(error)})
         },
+    },
+    gant:{
         gant: (jwt:string, data: {surname?:string, group?:string, subgroup?:string, favourite?:boolean, dateStart?:Date, dateEnd?:Date}) => {
             return fetch(UrlBuilder.students.gant(), {
                 method:"GET",
@@ -60,6 +62,17 @@ const endpoint = {
                 },
                 body: JSON.stringify(data)
             }).then(response => response.json()).then(res => {
+                return res
+            }).catch(error => {throw new Error(error)})
+        },
+        downloadCSV: (jwt:string, data: {surname?:string, group?:string, subgroup?:string, favourite?:boolean, dateStart?:Date, dateEnd?:Date}) => {
+            return fetch(UrlBuilder.requests.export(), {
+                method:"GET",
+                headers:{
+                    'Authorization': `Bearer ${jwt}`
+                },
+                body: JSON.stringify(data)
+            }).then(response => response.json()).then(res => {//Что делать с response? Должен же быть CSV?
                 return res
             }).catch(error => {throw new Error(error)})
         }

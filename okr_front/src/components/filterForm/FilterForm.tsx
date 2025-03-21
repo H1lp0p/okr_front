@@ -14,7 +14,8 @@ interface filterInterface{
 }
 
 interface filterProps extends BaseProps{
-    onSubmin: (formData:filterInterface) => void;
+    onSubmit: (formData:filterInterface) => void;
+    onDownload: (formData: filterInterface) => void;
 }
 
 function Filter(props: filterProps){
@@ -37,7 +38,7 @@ function Filter(props: filterProps){
 
     const handleChecked = (event: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
         setIsChecked((event.target as HTMLInputElement).checked)
-        handleChange(event)
+        setFormData({...formData, ["favourite"]:(event.target as HTMLInputElement).checked})
     };
 
     const handleSubmit = (event: React.FormEvent<HTMLFormElement>) =>{
@@ -46,77 +47,104 @@ function Filter(props: filterProps){
         if (target.checkValidity()){
             setValidated(true);
             try{
+                console.log(formData)
+                //props.onSubmit(formData);
             }catch (e: any){
                 setError(e);
             }
         }
     };
+    const handleDownload = () => {
+        try{
+            console.log(formData)
+            //props.onDownload(formData);
+        }catch(e: any){
+            setError(e);
+        }
+    }
 
     return (
         <CustomForm
-        id='filter-form' className={`filter-cont container-lg border-right border-bottom custom-rounded custom-shadow d-flex flex-column gap-3 p-5 ${isValidated? "was-validated": "needs-validation"}`}
+        id='filter-form' className={`filter-cont container-lg border-right border-bottom custom-rounded custom-shadow d-flex flex-column gap-3 ${isValidated? "was-validated": "needs-validation"}`}
         divClass='' onSubmin={(event) => handleSubmit(event)} error={error}>
-            <div className="d-flex flex-row">
+            <div className="d-flex flex-row mb-1 align-items-center">
+                <span className="row-title first">Студенты</span>
                 <Input
                 inputType={"text"}
                 placehodler={"Фамилия"}
-                classAttr={" filterInput"}
+                classAttr={" filterInput leftRadius"}
                 onChange={handleChange}
                 validFeedback={""}
                 invalidFeedback={"Введите корректное значение"}
                 required={false}
-                name={"name"}
+                name={"surname"}
+                className={"first-string-input"}
                 />
                 <Input
                 inputType={"text"}
                 placehodler={"Группа"}
-                classAttr={" filterInput"}
+                classAttr={" filterInput noRadius"}
                 onChange={handleChange}
                 validFeedback={""}
                 invalidFeedback={"Введите корректное значение"}
                 required={false}
                 name={"group"}
+                className={"first-string-input"}
                 />
                 <Input
                 inputType={"text"}
                 placehodler={"Подгруппы (названия подгрупп следует вводить через запятую)"}
-                classAttr={" filterInput"}
+                classAttr={" filterInput rightRadius"}
                 onChange={handleChange}
                 validFeedback={""}
                 invalidFeedback={"Введите подгруппы через запятую"}
                 required={false}
-                name={"subgroups"}
+                name={"subgroup"}
+                className={"first-string-input"}
                 />
                 <Input
                 inputType={"checkbox"}
-                classAttr={""}
+                classAttr={" custom-check-box"}
                 checked={isChecked}
                 onChange={handleChecked}
                 required={false}
                 name={"favourite"}
-                className="form-check"
-                label="Любимые группы"/>
+                className="form-check ms-5"
+                label="Любимые группы"
+                labelClassAttr="d-contents ms-3"/>
             </div>
-            <div className="d-flex flex-row">
+            <div className="d-flex flex-row align-items-center">
+                <span className="row-title second">Даты</span>
                 <Input
                 inputType={"Date"}
-                classAttr={" filterInput"}
+                classAttr={" filterInput leftRadius dateInput"}
                 onChange={handleChange}
                 required={false}
                 invalidFeedback={'Введите корректное значение: дд.мм.гг!'}
                 validFeedback={''}
                 name={"dateStart"}
+                className={"date-cont"}
                 />
                 <Input
                 inputType={"Date"}
-                classAttr={" filterInput"}
+                classAttr={" filterInput rightRadius dateInput"}
                 onChange={handleChange}
                 required={false}
                 name={"dateEnd"}
                 invalidFeedback={'Введите корректное значение: дд.мм.гг!'}
                 validFeedback={''}
+                className={"date-cont"}
                 />
-            </div>
+                <div className="ms-5 me-3">
+                    <span className="help-text">/* Даты указываются</span><br/> <span className="help-text">включительно */</span>
+                </div>
+                <div>
+                    <button type="submit" className="submin-btn ms-3"></button>
+                </div>
+                <div>
+                    <button type="button" className="download-btn ms-3" onClick={handleDownload}></button>
+                </div>
+            </div>            
         </CustomForm>
     );
 }

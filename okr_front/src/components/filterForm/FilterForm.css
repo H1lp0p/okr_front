@@ -1,6 +1,86 @@
 .filterInput{
     max-width: 320px !important;
     min-height: 68px !important;
-    border-radius: 16px !important;
     border-color: rgb(80, 80, 80) !important;
+}
+.leftRadius{
+    border-radius: 16px 0px 0px 16px !important;
+}
+.noRadius{
+    border-radius: 0px !important;
+}
+.rightRadius{
+    border-radius: 0px 16px 16px 0px !important
+}
+.filter-cont{
+    background-color: #f8f9fa; /* Светло-серый фон */
+    border: 1px solid #dee2e6; /* Светлая граница */
+    border-radius: 10px; /* Закругленные углы */
+    padding: 15px;
+    margin-bottom: 1rem;
+    width: 100%;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.date-cont{
+    width: fit-content;
+    flex:1;
+    max-width: 316px;
+}
+.first-string-input{
+    flex-grow: 3;
+    width: fit-content;
+    max-width: 316px;
+}
+.row-title{
+    font-size: 1rem;
+    font-weight: bold;
+    color: #495057;
+}
+.first{
+    margin-right: 1em;
+}
+.second{
+    margin-right: 3em;
+}
+.custom-check-box{
+    width: 30px !important;
+    height: 30px !important;
+    border-color: var(--bs-secondary-color) !important;
+    border-radius: 9px !important;
+}
+.d-contents{
+    display: inline-block;
+    vertical-align: middle;
+}
+.form-check-input:checked{
+    background-color: #495057 !important;
+}
+.submin-btn{
+    background-color: rgb(80,80,80);
+    border-radius: 10px;
+    padding: 20px 27px;
+    border: none;
+    cursor: pointer;
+    background-image: url('../../resources/searchBtn.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 20px 20px;
+}
+.help-text{
+    font-size: 1.2rem;
+    color: #808080;
+    font-style: normal;
+    line-height: 1.5;
+    white-space: pre-line;
+}
+.download-btn{
+    background-color: rgb(80,80,80);
+    border-radius: 10px;
+    padding: 20px 27px;
+    border: none;
+    cursor: pointer;
+    background-image: url('../../resources/downloadBtn.svg');
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: 20px 20px;
 }
