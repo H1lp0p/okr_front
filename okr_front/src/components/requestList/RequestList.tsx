@@ -302,7 +302,7 @@ function RequestList(props: RequestListProps){
             group: filtration.group,
             subgroup: filtration.subgroup,
             favourite: filtration.favourite,
-            dateStart: filtration.dateStart?.toISOString().slice(0, 10),
+            dateStart: filtration.dateStart != undefined? filtration.dateStart.toISOString().slice(0, 10) : undefined,
             dateEnd: filtration.dateEnd?.toISOString().slice(0, 10)
         }, {page: currentPage, pageSize: pageSize}).then(result => {
           let pagination = result.paginationDto
