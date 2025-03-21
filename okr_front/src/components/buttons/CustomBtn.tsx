@@ -6,13 +6,14 @@ type ButtonType = "submit" | "reset" | "button";
 interface buttonProps extends BaseProps{
     buttonType: ButtonType,
     value: string,
-    classAttr: string
+    classAttr: string,
+    onClick?: () => void
 }
 
 function Button(props: buttonProps){
     return (
         <div className={'button-group' + ` ${(props.className != undefined)? props.className:""}`}>
-            <button type={props.buttonType} className={props.classAttr}>{props.value}</button>
+            <button type={props.buttonType} className={props.classAttr} onClick={props.onClick}>{props.value}</button>
         </div>
     )
 }

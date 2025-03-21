@@ -88,11 +88,49 @@ const endpoint = {
                     'Authorization': `Bearer ${jwt}`
                 },
                 body: JSON.stringify(data)
-            }).then(response => response.json()).then(res => {//Что делать с response? Должен же быть CSV?
+            }).then(response => response.blob()).then(res => {//Что делать с response? Должен же быть CSV?
                 return res
             }).catch(error => {throw new Error(error)})
         }
     },
+    admin:{
+        getUsers:(jwt:string) =>{
+            return fetch(UrlBuilder.tools.getUsers(), {
+                method:"GET",
+                headers:{
+                    "Authorization": `Bearer ${jwt}`
+                }
+            }).then(response => {return response.json()}).then(res => {
+                return res
+            }).catch(error => {throw new Error(error)})
+        }
+    },
+    tools:{
+        addTeacher: (jwt:string, id:string) => {
+            return fetch(UrlBuilder.tools.addTeacher(id), {
+                method:"POST",
+                headers:{
+                    "Authorization": `Bearer ${jwt}`
+                }
+            }).then(response => {
+                if (response.ok){
+                    return true;
+                }
+            })
+        },
+        addSubGroup: (jwt:string, subgroupName:string, groupName:string) => {
+            return fetch(UrlBuilder.tools.addSubgroup(subgroupName, groupName), {
+                method:"POST",
+                headers:{
+                    "Authorization": `Bearer ${jwt}`
+                },
+                body: JSON.stringify({groupName, subgroupName})
+            }).then(response => {
+                if (response.ok){
+                    return true;
+                }
+            })
+        }
     worker: {
         getRequests: (jwt: string, filtration: FiltrationInterface, pagination: {page: number, pageSize: number}) => {
             let query = new URLSearchParams({...filtration, pageIndex: pagination.page.toString(), pageSize: pagination.pageSize.toString()})

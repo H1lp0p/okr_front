@@ -13,6 +13,7 @@ import {RequestStatuses, RequestTypes} from '../../types/request'
 import RequestList from '../requestList/RequestList';
 import Filter, {filterInterface} from '../filterForm/FilterForm';
 import endpoint from '../../api/endpoints';
+import Edit from '../pages/edit/Edit';
 import GanttTable from "../gant/gant.tsx";
 
 interface BodyProps extends BaseProps {
@@ -84,7 +85,8 @@ function Body() {
         <Route path="/registration" element={<Registration registration={register}/>}/>
         <Route path="/gant" element={<>
           <Filter 
-            onSubmin={gant}
+            onSubmit={gant}
+            onDownload={() => {}}
           />
           <GanttTable
               filtration={filterState}
@@ -99,6 +101,9 @@ function Body() {
           />
         */}
         </>}/>
+        <Route path="/Edit" element={<Edit
+        user={user}
+        />}/>
       </Routes>
     </>
   )
