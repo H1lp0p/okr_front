@@ -23,7 +23,7 @@ interface BodyProps extends BaseProps {
 function Body() {
 
   const [user, setUser] = useState(new UserModel())
-  const [filterState, setFilterState] = useState<filterInterface>()
+  const [filterState, setFilterState] = useState<filterInterface>({})
 
   const logout = () => {
     user.logout().then(res => {
@@ -45,10 +45,8 @@ function Body() {
   }
 
   const gant = (formData:filterInterface) => {
-      setFilterState(formData);
+    setFilterState(formData);
     }
-
-
       
   return (
     <>
@@ -67,7 +65,8 @@ function Body() {
         <Route path='/worker' element={
           <>
             <Filter 
-              onSubmin={gant}
+              onSubmit={gant}
+              onDownload={() => {}}
             />
             <RequestList
               className='h-75'
@@ -90,7 +89,7 @@ function Body() {
           />
           <GanttTable
               filtration={filterState}
-              jwt={user.Jwt}
+              jwt={user.Jwt!}
           />
         {/*
           <Filter 
