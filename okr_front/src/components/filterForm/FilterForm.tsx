@@ -5,12 +5,12 @@ import CustomForm from "../form/CustomForm";
 import Input from "../inputs/CustomInput"
 
 interface filterInterface{
-    surname: string,
-    group: string,
-    subgroup: string,
-    favourite: boolean,
-    dateStart: Date,
-    dateEnd: Date,
+    surname?: string,
+    group?: string,
+    subgroup?: string,
+    favourite?: boolean,
+    dateStart?: Date,
+    dateEnd?: Date,
 }
 
 interface filterProps extends BaseProps{
@@ -48,7 +48,7 @@ function Filter(props: filterProps){
             setValidated(true);
             try{
                 console.log(formData)
-                //props.onSubmit(formData);
+                props.onSubmit(formData);
             }catch (e: any){
                 setError(e);
             }
@@ -57,7 +57,7 @@ function Filter(props: filterProps){
     const handleDownload = () => {
         try{
             console.log(formData)
-            //props.onDownload(formData);
+            props.onDownload(formData);
         }catch(e: any){
             setError(e);
         }

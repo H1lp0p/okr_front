@@ -44,7 +44,6 @@ function RequestFull(props: RequestFullProps){
 
     const role = props.maxUserRole ? props.maxUserRole : Roles.student
 
-    //NEW VERSION OF REQUEST
     const [newRequest, setNewRequest] = useState(request) 
 
     const [isEdited, setEdited] = useState(false)
@@ -52,16 +51,20 @@ function RequestFull(props: RequestFullProps){
     const [CheckStatus, setCheckStatus] = useState(request? request.isDocInCabinet : false)
 
     const dropFileCallback = useCallback((acceptedFiles : File[]) => {
-        //!!!NEW ATTACHMENT
         let newAttachments = acceptedFiles.map((el) => {
             return new Attachment(el.name, new Date(), el, "-1")
         })
 
+        console.log(newAttachments)
+
         let temp = copy(newRequest)
         temp.attachments = [...newAttachments, ...temp.attachments]
-        setNewRequest(temp)
         
+        let newEdited = newAttachments.length > 0
 
+        setEdited(newEdited)
+
+        setNewRequest(temp)
     }, [])
 
     const {getRootProps, getInputProps, isDragActive} = useDropzone({onDrop: dropFileCallback})
@@ -129,7 +132,7 @@ function RequestFull(props: RequestFullProps){
         let temp = copy(newRequest)
         temp.requestStatus = newStatus
 
-        let edited = temp.requestStatus == request.requestStatus
+        let edited = temp.requestStatus != request.requestStatus
 
         setEdited(edited)
 
@@ -137,7 +140,7 @@ function RequestFull(props: RequestFullProps){
     }
 
     const dateToValue = (date: Date) => {
-        return `${date.getFullYear()}-${date.getMonth() < 10? `0${date.getMonth()}` : date.getMonth()}-${date.getDate() < 10? `0${date.getDate()}` : date.getDate()}`
+        return `${date.getFullYear()}-${date.getMonth() < 10? `0${date.getMonth() + 1}` : date.getMonth()}-${date.getDate() < 10? `0${date.getDate()}` : date.getDate()}`
     }
 
     const onSubmit = (event: React.FormEvent<HTMLFormElement>) => {
