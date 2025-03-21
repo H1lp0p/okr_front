@@ -52,9 +52,6 @@ function RequestFull(props: RequestFullProps){
     const [CheckStatus, setCheckStatus] = useState(request? request.isDocInCabinet : false)
 
     const dropFileCallback = useCallback((acceptedFiles : File[]) => {
-        acceptedFiles.forEach((val, ind) => {
-            console.log(val.name);
-        })
         //!!!NEW ATTACHMENT
         let newAttachments = acceptedFiles.map((el) => {
             return new Attachment(el.name, new Date(), el, "-1")
@@ -63,6 +60,7 @@ function RequestFull(props: RequestFullProps){
         let temp = copy(newRequest)
         temp.attachments = [...newAttachments, ...temp.attachments]
         setNewRequest(temp)
+        
 
     }, [])
 
